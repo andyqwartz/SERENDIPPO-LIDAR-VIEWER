@@ -37,6 +37,9 @@ LV.CONFIG = {
     { id: 'florence',     name: 'Florence - Duomo',             lat: 43.7731, lng: 11.2560, zoom: 16, notes: 'LiDAR PCN Toscane, TINITALY' },
     { id: 'venice',       name: 'Venise - Piazza San Marco',    lat: 45.4340, lng: 12.3380, zoom: 16, notes: 'LiDAR PCN Veneto, lagune' },
     { id: 'milan',        name: 'Milan - Duomo',                lat: 45.4642, lng: 9.1900,  zoom: 16, notes: 'LiDAR PCN Lombardie/Piemont' },
+    { id: 'roma_lidar',   name: 'Rome - Test LiDAR',            lat: 41.8979, lng: 12.4766, zoom: 15, notes: 'LiDAR PCN Latium 2m - DTM test' },
+    { id: 'napoli',       name: 'Naples - Vesuve',              lat: 40.8264, lng: 14.3050, zoom: 14, notes: 'LiDAR Campanie - DTM 2m' },
+    { id: 'etna',         name: 'Etna - Sicile',                lat: 37.7510, lng: 14.9934, zoom: 13, notes: 'LiDAR Sicile - relief volcanique' },
   ],
 
   // Limites SBS
