@@ -2,12 +2,28 @@
 var LV = window.LV || {};
 
 LV.UI = {
+  MOBILE_MQ: '(max-width: 768px)',
+
+  isMobile: function() {
+    return window.matchMedia(LV.UI.MOBILE_MQ).matches;
+  },
+
   isVisible: function(el) {
     return el && window.getComputedStyle(el).display !== 'none';
   },
 
-  positionNearButton: function(panel, btn) {
-    if (!panel || !btn) return;
+  positionPanel: function(panel, btn) {
+    if (!panel) return;
+    panel.style.transform = 'none';
+    if (LV.UI.isMobile()) {
+      panel.style.left = '8px';
+      panel.style.right = '8px';
+      panel.style.top = 'auto';
+      panel.style.width = 'auto';
+      panel.style.maxWidth = 'none';
+      return;
+    }
+    if (!btn) return;
     var rect = btn.getBoundingClientRect();
     var pw = panel.offsetWidth;
     var ph = panel.offsetHeight;
@@ -19,7 +35,6 @@ LV.UI = {
     panel.style.left = left + 'px';
     panel.style.top = top + 'px';
     panel.style.right = 'auto';
-    panel.style.transform = 'none';
   },
 
   togglePanel: function(panelId, btnId, onOpen) {
@@ -31,7 +46,7 @@ LV.UI = {
     btn.classList.toggle('active', open);
     if (open) {
       if (onOpen) onOpen();
-      LV.UI.positionNearButton(panel, btn);
+      LV.UI.positionPanel(panel, btn);
     }
   },
 
@@ -41,6 +56,19 @@ LV.UI = {
     if (!panel || !LV.UI.isVisible(panel)) return;
     panel.style.display = 'none';
     if (btn) btn.classList.remove('active');
+  },
+
+  repositionOpenPanels: function() {
+    [
+      ['overlaysPanel', 'btn-overlays'],
+      ['bookmarksPanel', 'btn-bookmarks']
+    ].forEach(function(p) {
+      var panel = document.getElementById(p[0]);
+      var btn = document.getElementById(p[1]);
+      if (panel && btn && LV.UI.isVisible(panel)) {
+        LV.UI.positionPanel(panel, btn);
+      }
+    });
   }
 };
 
@@ -146,10 +174,12 @@ LV.TOOLS.init = function() {
   LV.TOOLS.initLayerSelects();
 
   window.addEventListener('resize', function() {
-    var ol = document.getElementById('overlaysPanel');
-    var bm = document.getElementById('bookmarksPanel');
-    if (ol && LV.UI.isVisible(ol)) LV.UI.positionNearButton(ol, document.getElementById('btn-overlays'));
-    if (bm && LV.UI.isVisible(bm)) LV.UI.positionNearButton(bm, document.getElementById('btn-bookmarks'));
+    LV.UI.repositionOpenPanels();
+    if (LV.map) LV.map.invalidateSize();
+  });
+  window.matchMedia(LV.UI.MOBILE_MQ).addEventListener('change', function() {
+    LV.UI.repositionOpenPanels();
+    if (LV.map) LV.map.invalidateSize();
   });
 };
 

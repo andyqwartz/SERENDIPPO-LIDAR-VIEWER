@@ -12,6 +12,8 @@
   --radius: 4px;
   --font: 'Inter', -apple-system, sans-serif;
   --shadow: 0 1px 4px rgba(0,0,0,.4);
+  --dock-h: 0px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -462,16 +464,167 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
 }
 
 @media (max-width: 768px) {
-  .search-wrap { width: calc(100% - 20px); }
-  #toolbar { right: 4px; padding: 3px; }
-  #toolbar button { width: 34px; height: 34px; font-size: 9px; }
+  :root {
+    --dock-h: calc(132px + var(--safe-bottom));
+    --search-h: 44px;
+    --search-top: max(8px, env(safe-area-inset-top));
+    --zoom-top: calc(var(--search-top) + var(--search-h) + 6px);
+  }
+
+  #map {
+    height: 100dvh;
+  }
+
+  /* ── Recherche centrée ── */
+  .search-wrap {
+    top: var(--search-top);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100% - 16px);
+    max-width: none;
+  }
+  .search-row input { padding: 8px 12px; font-size: 16px; }
+  .search-row button { padding: 8px 12px; font-size: 11px; }
+  .search-results { max-height: 40dvh; padding-left: 42px; }
+
+  /* ── Toolbar — pilule centrée, compacte ── */
+  #toolbar {
+    top: auto;
+    left: 50%;
+    right: auto;
+    bottom: calc(var(--dock-h) + 6px);
+    transform: translateX(-50%);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px 8px;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-radius: 18px;
+  }
+  #toolbar::-webkit-scrollbar { display: none; }
+  #toolbar button {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
   #toolbar button::after { display: none; }
-  .bottom-bar { left: 8px; right: 8px; bottom: 8px; gap: 6px; }
-  .bottom-chip { min-height: 30px; border-radius: 16px; }
-  .layer-select { max-width: 34vw; padding: 5px 10px; }
-  .layer-select select { font-size: 10px; max-width: 22vw; }
-  .status-metrics { gap: 12px; padding: 4px 12px; }
-  .status-metric:first-child .status-value { max-width: 88px; }
+  #toolbar .sep {
+    width: 1px;
+    height: 24px;
+    margin: 0 1px;
+    align-self: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Dock bas : 2 lignes (couches + statut) ── */
+  .bottom-bar {
+    left: 10px;
+    right: 10px;
+    bottom: max(8px, var(--safe-bottom));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .layer-select--left { grid-column: 1; grid-row: 1; }
+  .layer-select--right { grid-column: 2; grid-row: 1; }
+  .bottom-center {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: stretch;
+  }
+  .bottom-center .bottom-chip {
+    width: 100%;
+  }
+  .layer-select {
+    max-width: none;
+    width: 100%;
+    justify-content: center;
+    padding: 6px 10px;
+    min-height: 36px;
+    border-radius: 16px;
+  }
+  .layer-select select {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    font-size: 11px;
+  }
+  .bottom-status {
+    width: 100%;
+    border-radius: 16px;
+  }
+  .status-scale { padding: 6px 10px; }
+  .status-metrics {
+    gap: 10px;
+    padding: 5px 10px 5px 0;
+    flex: 1;
+    justify-content: space-around;
+  }
+  .status-metric { flex: 1; align-items: center; }
+  .status-metric--alt { display: none; }
+  .status-metric:first-child .status-value { max-width: none; }
   .status-label { font-size: 8px; }
   .status-value { font-size: 10px; }
+
+  /* ── Panneaux → bottom sheet ── */
+  #bookmarksPanel,
+  #overlaysPanel {
+    top: auto !important;
+    bottom: calc(var(--dock-h) + 56px) !important;
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(45dvh, 360px);
+    border-radius: 14px 14px 10px 10px;
+  }
+
+  /* ── SBS handle plus large (touch) ── */
+  #sbs-handle {
+    width: 28px;
+    height: 52px;
+    border-radius: 6px;
+    touch-action: none;
+  }
+
+  /* ── Leaflet zoom — sous la barre de recherche, à gauche ── */
+  .leaflet-top.leaflet-left {
+    top: var(--zoom-top) !important;
+    left: 8px !important;
+  }
+  .leaflet-bottom.leaflet-left {
+    bottom: calc(var(--dock-h) + 52px) !important;
+  }
+  .leaflet-control-attribution {
+    max-width: calc(100vw - 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #measureTip {
+    top: calc(var(--search-top) + var(--search-h) + 4px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 24px);
+    text-align: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .layer-select > span { display: none; }
+  .status-divider { display: none; }
+  .status-scale { padding: 6px 8px; }
 }
