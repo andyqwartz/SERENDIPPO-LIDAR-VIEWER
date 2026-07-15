@@ -17,6 +17,7 @@ LV.SBS.init = function() {
   LV.SBS.updateClip();
   LV.map.on('move zoom resize viewreset', LV.SBS.updateClip);
   LV.SBS.bindDrag();
+  LV.SBS.bindToggle();
 };
 
 // ── CSS clip update ──
@@ -49,30 +50,26 @@ LV.SBS.applyLock = function() {
   var h = LV.SBS.handle;
   if (!h) return;
   if (LV.SBS.locked) {
-    // Verrouillé : drag libre, handle non interactif
     LV.map.dragging.enable();
     LV.map.scrollWheelZoom.enable();
-    h.style.pointerEvents = 'none';
-    h.style.cursor = 'default';
+    h.style.cursor = 'pointer';
     h.classList.remove('active');
-    LV.SBS.setSbsBtnState(false);
+    h.style.transform = 'translate(calc(-50% + 1px), -50%)';
   } else {
-    // Déverrouillé : drag désactivé, handle interactif
     LV.map.dragging.disable();
     LV.map.scrollWheelZoom.disable();
-    h.style.pointerEvents = 'all';
     h.style.cursor = 'ew-resize';
     h.classList.add('active');
-    LV.SBS.setSbsBtnState(true);
+    h.style.transform = 'translate(calc(-50% + 1px), -50%) rotate(90deg)';
   }
 };
 
-LV.SBS.setSbsBtnState = function(unlocked) {
-  var btn = document.getElementById('btn-sbs');
-  if (!btn) return;
-  btn.classList.toggle('active', unlocked);
-  btn.style.transform = unlocked ? 'rotate(90deg)' : '';
-  btn.title = unlocked ? 'Verrouiller la comparaison' : 'Comparer les couches';
+// ── Click sur le handle = toggle ──
+LV.SBS.bindToggle = function() {
+  LV.SBS.handle.addEventListener('click', function(e) {
+    if (LV.SBS.dragging) return;
+    LV.SBS.toggle();
+  });
 };
 
 // ── Drag du handle (mouse + touch) ──

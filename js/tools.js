@@ -29,7 +29,7 @@ LV.UI = {
     var ph = panel.offsetHeight;
     var gap = 10;
     var left = rect.left - pw - gap;
-    var top = rect.top + rect.height / 2 - ph / 2;
+    var top = (window.innerHeight - ph) / 2;
     if (left < 12) left = 12;
     top = Math.max(12, Math.min(top, window.innerHeight - ph - 12));
     panel.style.left = left + 'px';
@@ -82,13 +82,6 @@ LV.TOOLS = {
     }
   },
 
-  'btn-sbs': {
-    label: 'Comparer les couches',
-    on: function(btn) {
-      LV.SBS.toggle();
-    }
-  },
-
   'btn-geoloc': {
     label: 'Ma position',
     on: function() {
@@ -121,27 +114,47 @@ LV.TOOLS = {
   'btn-marker': {
     label: 'Placer un marqueur',
     on: function(btn) {
-      var f = function(e) {
-        var m = L.marker(e.latlng).addTo(LV.map)
-          .bindPopup('Position: ' + LV.formatCoord(e.latlng))
-          .openPopup();
-        LV.map.once('click', f);
-        // Proposer de nommer et ajouter aux bookmarks
-        var name = prompt('Nommer ce lieu :', 'Marqueur');
-        if (name && name.trim()) {
-          LV.Bookmarks.list.push({
-            id: 'loc_' + Date.now(),
-            name: name.trim(),
-            lat: e.latlng.lat,
-            lng: e.latlng.lng,
-            zoom: LV.map.getZoom(),
-            notes: LV.formatCoord(e.latlng)
-          });
-          LV.Bookmarks.save();
-          LV.Bookmarks.render();
+      // Si déjà actif, désactiver
+      if (btn.classList.contains('pinned')) {
+        btn.classList.remove('pinned');
+        LV.map.off('click', LV.TOOLS._markerHandler);
+        LV.TOOLS._markerHandler = null;
+        return;
+      }
+
+      LV.TOOLS._markerHandler = function(e) {
+        var name = prompt('Nommer ce lieu :', '');
+        // Annulation → supprimer le marqueur, désactiver
+        if (name === null) {
+          btn.classList.remove('pinned');
+          LV.map.off('click', LV.TOOLS._markerHandler);
+          LV.TOOLS._markerHandler = null;
+          return;
         }
+        // Nom vide → sauvegarder quand meme avec nom par defaut
+        if (!name.trim()) name = 'Marqueur';
+
+        var m = L.marker(e.latlng).addTo(LV.map)
+          .bindPopup(name + '<br>' + LV.formatCoord(e.latlng))
+          .openPopup();
+
+        LV.Bookmarks.list.push({
+          id: 'loc_' + Date.now(),
+          name: name.trim(),
+          lat: e.latlng.lat,
+          lng: e.latlng.lng,
+          zoom: LV.map.getZoom(),
+          notes: LV.formatCoord(e.latlng)
+        });
+        LV.Bookmarks.save();
+        LV.Bookmarks.render();
+
+        btn.classList.remove('pinned');
+        LV.map.off('click', LV.TOOLS._markerHandler);
+        LV.TOOLS._markerHandler = null;
       };
-      LV.map.once('click', f);
+
+      LV.map.once('click', LV.TOOLS._markerHandler);
       btn.classList.add('pinned');
     }
   }
@@ -185,8 +198,8 @@ LV.TOOLS.init = function() {
 
 // ── Selecteurs de couches ──
 LV.TOOLS.initLayerSelects = function() {
-  var keys = LV.SELECTABLE_LAYERS;
   var names = LV.LAYER_NAMES;
+  var groups = LV.LAYER_GROUPS || [{ label: '', keys: LV.SELECTABLE_LAYERS }];
   [
     { id: 'leftLayerSelect', key: 'leftKey', onChange: LV.TOOLS.switchLeftLayer },
     { id: 'rightLayerSelect', key: 'rightKey', onChange: LV.TOOLS.switchRightLayer }
@@ -194,11 +207,20 @@ LV.TOOLS.initLayerSelects = function() {
     var sel = document.getElementById(cfg.id);
     if (!sel) return;
     sel.innerHTML = '';
-    keys.forEach(function(key) {
-      var opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = names[key] || key;
-      sel.appendChild(opt);
+    groups.forEach(function(group) {
+      var container = sel;
+      if (group.label) {
+        var og = document.createElement('optgroup');
+        og.label = group.label;
+        container = og;
+        sel.appendChild(og);
+      }
+      group.keys.forEach(function(key) {
+        var opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = names[key] || key;
+        container.appendChild(opt);
+      });
     });
     sel.value = LV[cfg.key];
     sel.onchange = cfg.onChange;

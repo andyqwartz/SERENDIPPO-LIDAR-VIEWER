@@ -38,8 +38,9 @@ LV.Bookmarks.save = function() {
 LV.Bookmarks.add = function() {
   var c = LV.map.getCenter();
   var z = LV.map.getZoom();
-  var name = prompt('Nom du lieu :');
-  if (!name) return;
+  var name = prompt('Nom du lieu :', '');
+  if (name === null) return;
+  if (!name.trim()) name = 'Marqueur';
   LV.Bookmarks.list.push({
     id: 'loc_' + Date.now(),
     name: name,

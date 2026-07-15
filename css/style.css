@@ -37,6 +37,8 @@ body {
   flex-direction: column;
   width: 380px;
   max-width: calc(100vw - 24px);
+  background: #1a1a1a;
+  border-radius: 24px;
 }
 .search-row { display: flex; }
 .search-row input {
@@ -74,6 +76,8 @@ body {
   max-height: 260px;
   overflow-y: auto;
   box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  margin-top: -1px;
+  padding-top: 1px;
 }
 .search-results div {
   padding: 10px 16px;
@@ -374,15 +378,25 @@ body {
 }
 #sbs-handle {
   position: absolute; z-index: 1001;
-  width: 20px; height: 40px;
-  background: rgba(255,255,255,.85);
-  border-radius: 3px;
-  transform: translate(-50%, -50%); top: 50%;
+  width: 14px; height: 14px;
+  background: #1a1a1a;
+  border: 2px solid #555;
+  border-radius: 50%;
+  transform: translate(calc(-50% + 1px), -50%); top: 50%;
   cursor: ew-resize; user-select: none;
-  transition: box-shadow .15s;
+  transition: transform .2s, box-shadow .15s, border-color .15s;
 }
-#sbs-handle:hover { box-shadow: 0 0 0 2px var(--accent); }
-#sbs-handle.active { box-shadow: 0 0 0 2px var(--accent); }
+#sbs-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px; height: 10px;
+  background: #555;
+  box-shadow: -4px 0 0 #555, 4px 0 0 #555;
+}
+#sbs-handle:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(74,158,255,.25); }
+#sbs-handle.active { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(74,158,255,.25); }
 
 /* ── Measure ── */
 .measure-label {
@@ -486,14 +500,14 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
   }
   .search-row input { padding: 8px 12px; font-size: 16px; }
   .search-row button { padding: 8px 12px; font-size: 11px; }
-  .search-results { max-height: 40dvh; padding-left: 42px; }
+  .search-results { max-height: 40dvh; padding-left: 16px; }
 
   /* ── Toolbar — pilule centrée, compacte ── */
   #toolbar {
     top: auto;
     left: 50%;
     right: auto;
-    bottom: calc(var(--dock-h) + 6px);
+    bottom: calc(var(--dock-h) - 12px);
     transform: translateX(-50%);
     flex-direction: row;
     flex-wrap: nowrap;
@@ -553,11 +567,13 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
     padding: 6px 10px;
     min-height: 36px;
     border-radius: 16px;
+    overflow: hidden;
   }
   .layer-select select {
     flex: 1;
     min-width: 0;
-    max-width: none;
+    width: 0;
+    max-width: 100%;
     font-size: 11px;
   }
   .bottom-status {
@@ -590,11 +606,12 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
     border-radius: 14px 14px 10px 10px;
   }
 
-  /* ── SBS handle plus large (touch) ── */
+  /* ── SBS handle (même rond, un peu plus gros pour le touch) ── */
   #sbs-handle {
-    width: 28px;
-    height: 52px;
-    border-radius: 6px;
+    width: 18px;
+    height: 18px;
+    border-width: 2px;
+    border-radius: 50%;
     touch-action: none;
   }
 
