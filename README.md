@@ -4,23 +4,6 @@ Compare **IGN LiDAR HD** with satellite imagery, orthophotos and historical maps
 
 No build step. No API key. Static files only.
 
-## Live demo (GitHub Pages)
-
-1. Push this repo to GitHub
-2. **Settings → Pages → Build and deployment**
-3. Source: **Deploy from a branch**
-4. Branch: **main** / **/ (root)**
-5. Open `https://<user>.github.io/<repo>/`
-
-## Run locally
-
-```bash
-python3 -m http.server 8000
-# http://localhost:8000
-```
-
-Or open `index.html` directly (some tile layers may block `file://`).
-
 ## Features
 
 - Split view (slider) — independent left & right layers
