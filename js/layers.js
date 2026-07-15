@@ -148,30 +148,15 @@ LV.createLayer = function(key) {
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_PIEMONTE.map', 'EL.LIDAR.PIEMONTE.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Piémont' }),
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_LOMBARDIA.map', 'EL.LIDAR.LOMBARDIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Lombardie' }),
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_VENETO.map', 'EL.LIDAR.VENETO.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Vénétie' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_EMILIA_ROMAGNA.map', 'EL.LIDAR.EMILIA_ROMAGNA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Émilie-Romagne' }),
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_TOSCANA.map', 'EL.LIDAR.TOSCANA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Toscane' }),
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_LAZIO.map', 'EL.LIDAR.LAZIO.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Latium' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_ABRUZZO.map', 'EL.LIDAR.ABRUZZO.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Abruzzes' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_MARCHE.map', 'EL.LIDAR.MARCHE.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Marches' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_UMBRIA.map', 'EL.LIDAR.UMBRIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Ombrie' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_LIGURIA.map', 'EL.LIDAR.LIGURIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Ligurie' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_CAMPANIA.map', 'EL.LIDAR.CAMPANIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Campanie' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_PUGLIA.map', 'EL.LIDAR.PUGLIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Pouilles' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_BASILICATA.map', 'EL.LIDAR.BASILICATA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Basilicate' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_CALABRIA.map', 'EL.LIDAR.CALABRIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Calabre' }),
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_SICILIA.map', 'EL.LIDAR.SICILIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Sicile' }),
         wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_SARDEGNA.map', 'EL.LIDAR.SARDEGNA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Sardaigne' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_MOLISE.map', 'EL.LIDAR.MOLISE.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Molise' }),
       ]);
     case 'it_igm25':
       return wms3857('https://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map', 'CB.IGM25000.32,CB.IGM25000.33', {
         maxZoom: 16, transparent: false, attribution: '© IGM / MASE — Carte 1:25 000'
       });
-    // ── Europe / Autres ──
-    case 'dtm_europe':
-      // DTM Europe OpenTopography: pas de tile service, utilisable via AWS S3
-      // Données : portal.opentopography.org/raster?opentopoID=OTSDEM.092022.3035.1
-      return null;
     default:
       return null;
   }
@@ -210,10 +195,6 @@ LV.LAYER_GROUPS = [
     keys: ['lidar_it', 'mdt_it', 'it_igm25']
   },
   {
-    label: 'Europe',
-    keys: ['dtm_europe']
-  },
-  {
     label: 'Global',
     keys: ['satellite', 'hybrid', 'arcgis', 'osm']
   }
@@ -245,7 +226,6 @@ LV.LAYER_NAMES = {
   mdt_it: 'MNT TINITALY 10 m (Italie)',
   lidar_it: 'LiDAR PCN WMS 2m (Italie)',
   it_igm25: 'IGM 1:25 000 (Italie)',
-  dtm_europe: 'DTM Europe (via AWS S3)',
   satellite: 'Google Satellite',
   hybrid: 'Google Satellite + Labels',
   arcgis: 'ArcGIS World Imagery',
