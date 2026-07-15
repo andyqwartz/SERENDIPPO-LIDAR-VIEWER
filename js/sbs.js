@@ -68,16 +68,10 @@ LV.SBS.applyLock = function() {
 LV.SBS.bindDragAndToggle = function() {
   var h = LV.SBS.handle;
 
-  function getXY(e) {
-    return e.touches
-      ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
-      : { x: e.clientX, y: e.clientY };
-  }
-
   function onStart(e) {
-    if (LV.SBS.locked) return;
     LV.SBS.dragging = true;
     LV.SBS.dragMoved = false;
+    if (LV.SBS.locked) return;
     LV.map.dragging.disable();
     e.preventDefault();
   }
@@ -85,12 +79,14 @@ LV.SBS.bindDragAndToggle = function() {
   function onMove(e) {
     if (!LV.SBS.dragging) return;
     LV.SBS.dragMoved = true;
+    if (LV.SBS.locked) return;
     var r = LV.map.getContainer().getBoundingClientRect();
-    var xy = getXY(e);
-    var pct = ((xy.x - r.left) / r.width) * 100;
+    var x = e.touches ? e.touches[0].clientX : e.clientX;
+    var pct = ((x - r.left) / r.width) * 100;
     LV.SBS.setPct(pct);
   }
 
+  // Mouse: onEnd nettoie, le toggle se fait via click
   function onEnd() {
     if (!LV.SBS.dragging) return;
     LV.SBS.dragging = false;
@@ -98,7 +94,17 @@ LV.SBS.bindDragAndToggle = function() {
     if (!LV.SBS.locked) LV.map.dragging.disable();
   }
 
-  // Click = toggle (toujours, pas bloque par le drag)
+  // Touch: onEnd + toggle si pas de drag
+  function onTouchEnd() {
+    if (!LV.SBS.dragging) return;
+    var moved = LV.SBS.dragMoved;
+    LV.SBS.dragging = false;
+    LV.SBS.dragMoved = false;
+    if (!LV.SBS.locked) LV.map.dragging.disable();
+    if (!moved) LV.SBS.toggle();
+  }
+
+  // Click = toggle (desktop)
   h.addEventListener('click', function() {
     LV.SBS.toggle();
   });
@@ -108,5 +114,5 @@ LV.SBS.bindDragAndToggle = function() {
   window.addEventListener('mouseup', onEnd);
   h.addEventListener('touchstart', onStart, { passive: false });
   window.addEventListener('touchmove', onMove, { passive: false });
-  window.addEventListener('touchend', onEnd);
+  window.addEventListener('touchend', onTouchEnd);
 };
