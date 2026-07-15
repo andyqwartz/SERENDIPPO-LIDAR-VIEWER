@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Compare IGN LiDAR HD with satellite and map layers — side by side viewer for France.">
+  <title>SERENDIPPO LiDAR Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen@2.4.0/Control.FullScreen.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="sbs-divider"></div>
+<div id="sbs-handle"></div>
+
+<div class="search-wrap">
+  <div class="search-row">
+    <input id="searchInput" placeholder="Commune ou coordonnees..." autocomplete="off">
+    <button id="searchBtn" type="button">Chercher</button>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<footer class="bottom-bar">
+  <div class="bottom-chip layer-select layer-select--left">
+    <span>Gauche:</span>
+    <select id="leftLayerSelect"></select>
+  </div>
+
+  <div class="bottom-center">
+    <div class="bottom-chip bottom-status">
+      <div id="scaleSlot" class="status-scale"></div>
+      <div class="status-divider" aria-hidden="true"></div>
+      <div class="status-metrics">
+        <div class="status-metric">
+          <span class="status-label">Coords</span>
+          <strong id="coordDisplay" class="status-value">---</strong>
+        </div>
+        <div class="status-metric">
+          <span class="status-label">Alt</span>
+          <strong id="altDisplay" class="status-value">---</strong>
+        </div>
+        <div class="status-metric">
+          <span class="status-label">Zoom</span>
+          <strong id="zoomDisplay" class="status-value">---</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-chip layer-select layer-select--right">
+    <span>Droite:</span>
+    <select id="rightLayerSelect"></select>
+  </div>
+</footer>
+
+<div id="toolbar">
+  <button id="btn-sbs" type="button" title="Comparer">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h12M8 2l-4 6 4 6"/></svg>
+  </button>
+  <button id="btn-night" type="button" title="Nuit">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12.5 9a6 6 0 0 1-5.5-8.5 6.5 6.5 0 1 0 7 7.5A6 6 0 0 1 12.5 9z"/></svg>
+  </button>
+  <button id="btn-geoloc" type="button" title="Position">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>
+  </button>
+  <div class="sep"></div>
+  <button id="btn-bookmarks" type="button" title="Lieux">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 1.5h8v13l-4-3.5-4 3.5v-13z"/></svg>
+  </button>
+  <button id="btn-marker" type="button" title="+Marqueur">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1c-2.8 0-5 2.2-5 5 0 3.8 5 9 5 9s5-5.2 5-9c0-2.8-2.2-5-5-5z"/><circle cx="8" cy="6" r="1.5" fill="currentColor"/></svg>
+  </button>
+  <button id="btn-measure" type="button" title="Mesure">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 13l2-2 2 2 2-2 2 2 2-2 2 2 2-2"/><path d="M1 13V3h14v10"/></svg>
+  </button>
+  <div class="sep"></div>
+  <button id="btn-overlays" type="button" title="Calques">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l6-2 6 2-6 2-6-2z"/><path d="M2 8l6-2 6 2-6 2-6-2z"/><path d="M2 12l6-2 6 2-6 2-6-2z"/></svg>
+  </button>
+  <button id="btn-reset" type="button" title="Reset">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 6.5A5.5 5.5 0 0 1 13 7.5M12.5 9.5A5.5 5.5 0 0 1 3 8.5"/><path d="M2.5 4v3h3M13.5 12V9h-3"/></svg>
+  </button>
+</div>
+
+<div id="bookmarksPanel">
+  <div class="panel-header">
+    <span>Lieux memorises</span>
+    <div class="panel-header-actions">
+      <button class="bm-add-btn" id="bm-add-btn" type="button">+ Ajouter</button>
+      <button class="panel-close" id="bm-close" type="button" title="Fermer">&#x2715;</button>
+    </div>
+  </div>
+  <div id="bookmarksList"></div>
+</div>
+
+<div id="overlaysPanel">
+  <div class="panel-header">
+    <span>Calques superposables</span>
+    <button class="panel-close" id="ol-close" type="button" title="Fermer">&#x2715;</button>
+  </div>
+  <div class="overlays-list"></div>
+</div>
+
+<div id="measureTip"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.fullscreen@2.4.0/Control.FullScreen.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layers.js"></script>
+<script src="js/map.js"></script>
+<script src="js/sbs.js"></script>
+<script src="js/search.js"></script>
+<script src="js/bookmarks.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/measure.js"></script>
+<script src="js/overlays.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
