@@ -7,7 +7,8 @@ LV.SBS = {
   handle: null,
   divider: null,
   dragging: false,
-  dragMoved: false
+  dragMoved: false,
+  touchToggled: false
 };
 
 // ── Initialisation ──
@@ -101,11 +102,18 @@ LV.SBS.bindDragAndToggle = function() {
     LV.SBS.dragging = false;
     LV.SBS.dragMoved = false;
     if (!LV.SBS.locked) LV.map.dragging.disable();
-    if (!moved) LV.SBS.toggle();
+    if (!moved) {
+      LV.SBS.touchToggled = true;
+      LV.SBS.toggle();
+    }
   }
 
-  // Click = toggle (desktop)
+  // Click = toggle (desktop seulement, ignore apres touch)
   h.addEventListener('click', function() {
+    if (LV.SBS.touchToggled) {
+      LV.SBS.touchToggled = false;
+      return;
+    }
     LV.SBS.toggle();
   });
 
