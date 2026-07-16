@@ -1,33 +1,33 @@
 # SERENDIPPO LiDAR Viewer
 
-**Side-by-side LiDAR, satellite, orthophotos et cartes historiques dans le navigateur.** Pas de build, pas de clé API, 24 couches.
+**Side-by-side LiDAR, satellite, orthophotos and historical maps in the browser.** No build step, no API key, 24 layers.
 
-→ [Ouvrir l'application](https://andyqwartz.github.io/SERENDIPPO-LIDAR-VIEWER)
+→ [Open the app](https://andyqwartz.github.io/SERENDIPPO-LIDAR-VIEWER)
 
-## En un coup d'œil
+## Overview
 
-- **Split view** — couches gauche/droite indépendantes, slider CSS clip
-- **France** (production) — LiDAR HD IGN, ortho, plans, Cassini, État-Major, SCAN50, orthos 1950-1965-1980
-- **Espagne / Italie** (dev) — PNOA LiDAR, MDT, MTN, TINITALY, PCN WMS, IGM
-- **Overlays** — hydrographie, cadastre, courbes de niveau, limites admin, forêts
-- **Outils** — recherche géographique, bookmarks, mesure, mode nuit, fullscreen, géolocalisation
+- **Split view** — independent left/right layers, CSS clip slider
+- **France** (production) — IGN LiDAR HD, ortho, plans, Cassini, État-Major, SCAN50, 1950-1965-1980 orthos
+- **Spain / Italy** (dev) — PNOA LiDAR, MDT, MTN, TINITALY, PCN WMS, IGM
+- **Overlays** — hydrography, cadastre, contour lines, administrative limits, forests
+- **Tools** — geocoding search, bookmarks, distance measure, night mode, fullscreen, geolocation
 
 ## Stack
 
-| Technologie | Usage |
+| Tech | Use |
 |---|---|
-| [Leaflet](https://leafletjs.com/) 1.9 | Carte, WMTS, WMS |
-| Vanilla JS | ~1500 lignes, zéro dépendance |
-| CSS custom | Thème dark, responsive mobile/desktop |
-| [api-adresse](https://adresse.data.gouv.fr/) | Géocoding communes France |
-| localStorage | Bookmarks persistants |
+| [Leaflet](https://leafletjs.com/) 1.9 | Map, WMTS, WMS |
+| Vanilla JS | ~1500 LOC, zero dependencies |
+| Custom CSS | Dark theme, responsive layout |
+| [api-adresse](https://adresse.data.gouv.fr/) | French commune geocoding |
+| localStorage | Persistent bookmarks |
 
 ## Architecture
 
 ```
 js/
-├── namespace.js        # LV — unique point d'entrée
-├── config.js           # LV.CONFIG — vue par défaut, bookmarks
+├── namespace.js        # LV entry point
+├── config.js           # LV.CONFIG — defaults, bookmarks
 ├── constants.js        # LV.WMTS, LV.URL, LV.ATTR (frozen)
 ├── layers/             # helpers, registry, factory, cache, labels, groups
 ├── providers/          # france.js (prod) + dev.js (ES/IT)
@@ -36,26 +36,22 @@ js/
 └── app.js              # bootstrap
 ```
 
-**Init flow** : `DOMContentLoaded → LV.init() → map → SBS → search → bookmarks → tools → overlays`
+**Init**: `DOMContentLoaded → LV.init() → map → SBS → search → bookmarks → tools → overlays`
 
-**Provider dispatch** : `LV.createLayer(key) → PROV_FR[key]() | PROV_DEV[key]() | switch global`
-
-## Tests
-
-Ouvre `tests/test.html` dans un navigateur. 30+ tests de régression vanilla JS — namespace, carte, providers, cache, SBS, bookmarks, overlays, UI.
+**Providers**: `LV.createLayer(key) → PROV_FR[key]() | PROV_DEV[key]() | global switch`
 
 ## Provider status
 
-| Pays | Statut | Note |
+| Country | Status | Notes |
 |---|---|---|
-| France | **Production** | Toutes les couches stables |
-| Espagne | Dev | PNOA LiDAR, MDT — partiellement fonctionnel |
-| Italie | Dev | TINITALY, PCN WMS — souvent instable |
+| France | **Production** | All layers stable |
+| Spain | Dev | PNOA LiDAR, MDT — partially working |
+| Italy | Dev | TINITALY, PCN WMS — often unreliable |
 
-## Données
+## Data
 
 IGN Géoplateforme, IDEe/CNIG, TINITALY/INGV, Geoportale PCN, Google, Esri, OSM.
 
-## Licence
+## License
 
-Données © leurs fournisseurs respectifs. Code : utilisation libre.
+Data © respective providers. Code: use freely.
