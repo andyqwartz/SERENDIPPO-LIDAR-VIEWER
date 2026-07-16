@@ -26,11 +26,11 @@ LV.OVERLAYS.init = function() {
       case 'limites':
         layer = LV.ignWMTS('ADMINEXPRESS-COG-CARTO-PE.LATEST', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.45, attribution: 'IGN — Limites admin' }); break;
       case 'forets':
-        layer = LV.ignWMTS('FORETS.PUBLIQUES', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.4, attribution: 'ONF — Forets' }); break;
+        layer = LV.ignWMTS('FORETS.PUBLIQUES', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.4, attribution: 'ONF — Forets' }); break;
       case 'ignj1':
         layer = LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Plan J+1' }); break;
       case 'alti':
-        layer = LV.ignWMTS('ELEVATION.ELEVATIONGRIDCOVERAGE', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Altimetrie' }); break;
+        layer = LV.ignWMTS('ELEVATION.ELEVATIONGRIDCOVERAGE', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Altimetrie' }); break;
     }
     if (layer) {
       layer.options.pane = LV.PANE_OVERLAYS;
