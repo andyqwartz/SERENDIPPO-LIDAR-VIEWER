@@ -47,7 +47,7 @@ LV.initMap = function() {
   // Zoom initial dans le status
   document.getElementById('zoomDisplay').textContent = map.getZoom();
 
-  // Hash URL
+  // Hash URL (URLSync prend le relais dans l'init)
   LV.initHash();
 
   return map;
@@ -63,20 +63,10 @@ LV.formatCoord = function(latlng) {
 };
 
 /**
- * Initialise le hash URL (#lat,lng,zoom) et le met a jour au deplacement.
+ * Ancien hash — remplacé par LV.URLSync.
+ * Gardé pour compatibilité.
  */
-LV.initHash = function() {
-  var h = location.hash.replace('#', '').split(',');
-  if (h.length === 3) {
-    var la = parseFloat(h[0]), lo = parseFloat(h[1]), z = parseInt(h[2]);
-    if (!isNaN(la) && !isNaN(lo) && !isNaN(z))
-      LV.map.setView([la, lo], z);
-  }
-  LV.map.on('moveend', function() {
-    var c = LV.map.getCenter();
-    location.hash = c.lat.toFixed(4) + ',' + c.lng.toFixed(4) + ',' + LV.map.getZoom();
-  });
-};
+LV.initHash = function() {};
 
 /**
  * Deplace le scale control Leaflet dans le slot de la barre de statut.
