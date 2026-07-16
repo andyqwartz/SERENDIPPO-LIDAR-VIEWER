@@ -75,6 +75,12 @@ LV.TOOLS = {
       LV.map.once('click', LV.TOOLS._markerHandler);
       btn.classList.add('pinned');
     }
+  },
+  'btn-screenshot': {
+    label: 'Capture d\'écran',
+    on: function() {
+      LV.Screenshot.capture();
+    }
   }
 };
 

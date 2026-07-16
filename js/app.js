@@ -10,6 +10,7 @@ LV.init = function() {
   LV.OVERLAYS.init();
   LV.TrackManager.init();
   LV.URLSync.init();
+  LV.Screenshot.init();
   LV.initPanels();
 };
 
