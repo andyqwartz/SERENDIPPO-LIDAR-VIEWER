@@ -96,7 +96,12 @@
       <button class="panel-close" id="bm-close" type="button" title="Fermer">&#x2715;</button>
     </div>
   </div>
-  <div id="bookmarksList"></div>
+  <div class="panel-tabs">
+    <button class="tab-btn active" data-tab="views">Vues</button>
+    <button class="tab-btn" data-tab="tracks">Tracks</button>
+  </div>
+  <div class="tab-content tab-content--views active" id="bookmarksList"></div>
+  <div class="tab-content tab-content--tracks" id="tracksList"></div>
 </div>
 
 <div id="overlaysPanel">
@@ -131,6 +136,8 @@
 <script src="js/ui/toolRegistry.js"></script>
 <script src="js/ui/layerSelects.js"></script>
 <script src="js/tools.js"></script>
+<script src="js/parsers/gpxParser.js"></script>
+<script src="js/ui/trackManager.js"></script>
 <script src="js/measure.js"></script>
 <script src="js/overlays.js"></script>
 <script src="js/app.js"></script>

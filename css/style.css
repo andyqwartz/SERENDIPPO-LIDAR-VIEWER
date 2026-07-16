@@ -645,3 +645,93 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
   .status-divider { display: none; }
   .status-scale { padding: 6px 8px; }
 }
+
+/* ── Onglets dans le panneau bookmarks ── */
+.panel-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  flex: 1;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text3);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .12s;
+}
+.tab-btn:hover { color: var(--text2); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── Track items ── */
+.track-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  margin-bottom: 3px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+}
+.track-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.track-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+.track-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.track-actions button {
+  width: 20px; height: 20px;
+  border: none; background: transparent;
+  cursor: pointer; font-size: 10px;
+  border-radius: 2px;
+  color: var(--text3);
+  display: grid; place-items: center;
+  transition: all .1s;
+}
+.track-actions button:hover {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* ── Drag & drop indicator ── */
+body.drag-over::after {
+  content: 'DEPOSER UN FICHIER GPX';
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.7);
+  color: var(--accent);
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  border: 3px dashed var(--accent);
+  pointer-events: none;
+}

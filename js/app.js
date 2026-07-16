@@ -8,6 +8,7 @@ LV.init = function() {
   LV.Bookmarks.render();
   LV.TOOLS.init();
   LV.OVERLAYS.init();
+  LV.TrackManager.init();
   LV.initPanels();
 };
 
