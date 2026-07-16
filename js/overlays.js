@@ -3,10 +3,6 @@ var LV = window.LV || {};
 
 LV.OVERLAYS = {};
 
-function ignWMTS(layer, tms, format, opts) {
-  return L.tileLayer('https://data.geopf.fr/wmts?LAYER=' + layer + '&STYLE=normal&TILEMATRIXSET=' + tms + '&FORMAT=image/' + format + '&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', opts || {});
-}
-
 LV.OVERLAY_DEFS = {
   hydro:   { name: 'Reseau hydro',      layer: null, active: false },
   cadastre:{ name: 'Cadastre',          layer: null, active: false },
@@ -23,19 +19,19 @@ LV.OVERLAYS.init = function() {
     var layer = null;
     switch (id) {
       case 'hydro':
-        layer = ignWMTS('HYDROGRAPHY.HYDROGRAPHY', 'PM', 'png', { maxZoom: 19, opacity: 0.55, attribution: 'IGN — Hydrographie' }); break;
+        layer = LV.ignWMTS('HYDROGRAPHY.HYDROGRAPHY', 'PM', 'png', { maxZoom: 19, opacity: 0.55, attribution: 'IGN — Hydrographie' }); break;
       case 'cadastre':
-        layer = ignWMTS('CADASTRALPARCELS.PARCELLAIRE_EXPRESS', 'PM', 'png', { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Cadastre' }); break;
+        layer = LV.ignWMTS('CADASTRALPARCELS.PARCELLAIRE_EXPRESS', 'PM', 'png', { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Cadastre' }); break;
       case 'contour':
-        layer = ignWMTS('ELEVATION.CONTOUR.LINE', 'PM', 'png', { maxZoom: 19, opacity: 0.65, attribution: 'IGN — Courbes niveau' }); break;
+        layer = LV.ignWMTS('ELEVATION.CONTOUR.LINE', 'PM', 'png', { maxZoom: 19, opacity: 0.65, attribution: 'IGN — Courbes niveau' }); break;
       case 'limites':
-        layer = ignWMTS('ADMINEXPRESS-COG-CARTO-PE.LATEST', 'PM', 'png', { maxZoom: 19, opacity: 0.45, attribution: 'IGN — Limites admin' }); break;
+        layer = LV.ignWMTS('ADMINEXPRESS-COG-CARTO-PE.LATEST', 'PM', 'png', { maxZoom: 19, opacity: 0.45, attribution: 'IGN — Limites admin' }); break;
       case 'forets':
-        layer = ignWMTS('FORETS.PUBLIQUES', 'PM', 'png', { maxZoom: 19, opacity: 0.4, attribution: 'ONF — Forets' }); break;
+        layer = LV.ignWMTS('FORETS.PUBLIQUES', 'PM', 'png', { maxZoom: 19, opacity: 0.4, attribution: 'ONF — Forets' }); break;
       case 'ignj1':
-        layer = ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Plan J+1' }); break;
+        layer = LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Plan J+1' }); break;
       case 'alti':
-        layer = ignWMTS('ELEVATION.ELEVATIONGRIDCOVERAGE', 'PM', 'png', { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Altimetrie' }); break;
+        layer = LV.ignWMTS('ELEVATION.ELEVATIONGRIDCOVERAGE', 'PM', 'png', { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Altimetrie' }); break;
     }
     if (layer) {
       layer.options.pane = LV.PANE_OVERLAYS;

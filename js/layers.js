@@ -5,9 +5,9 @@ LV.PANE_RIGHT = 'rightPane';
 LV.PANE_OVERLAYS = 'overlaysPane';
 
 // Helper WMTS IGN (Geoplateforme, PM / EPSG:2154 tiles)
-function ignWMTS(layer, tms, format, opts) {
+LV.ignWMTS = function(layer, tms, format, opts) {
   return L.tileLayer('https://data.geopf.fr/wmts?LAYER=' + layer + '&STYLE=normal&TILEMATRIXSET=' + tms + '&FORMAT=image/' + format + '&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', opts || {});
-}
+};
 
 // WMTS GoogleMapsCompatible (IDEe, IGN-CNIG Espagne…)
 function gmWMTS(base, layer, style, format, opts) {
@@ -32,32 +32,10 @@ function wms3857(url, layers, opts) {
   }, opts || {}));
 }
 
-// Export dynamique ArcGIS MapServer (LiDAR régional Italie)
-function arcgisExport(serviceUrl, layerId, opts) {
-  return L.tileLayer('', L.extend({}, opts, {
-    getTileUrl: function(coords) {
-      var tileSize = this.getTileSize();
-      var nwPoint = coords.scaleBy(tileSize);
-      var sePoint = nwPoint.add(tileSize);
-      var nw = this._map.unproject(nwPoint, coords.z);
-      var se = this._map.unproject(sePoint, coords.z);
-      var crs = this._map.options.crs;
-      var sw = crs.project(L.latLng(se.lat, nw.lng));
-      var ne = crs.project(L.latLng(nw.lat, se.lng));
-      return serviceUrl + '/export?f=image&format=png&transparent=true' +
-        '&size=' + tileSize.x + ',' + tileSize.y +
-        '&bbox=' + sw.x + ',' + sw.y + ',' + ne.x + ',' + ne.y +
-        '&bboxSR=3857&imageSR=3857&layers=show:' + layerId;
-    }
-  }));
-}
-
-var PCN_LIDAR = 'https://www.pcn.minambiente.it/arcgis/rest/services/dtm';
-
 LV.createLayer = function(key) {
   switch (key) {
     case 'lidar':
-      return ignWMTS('IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', 'PM', 'png', {
+      return LV.ignWMTS('IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', 'PM', 'png', {
         maxZoom: 19, attribution: 'IGN-F — LiDAR HD MNT'
       });
     case 'arcgis':
@@ -73,49 +51,49 @@ LV.createLayer = function(key) {
         maxZoom: 19, attribution: '© IGN-F'
       });
     case 'mns':
-      return ignWMTS('IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', 'PM_0_18', 'png', {
+      return LV.ignWMTS('IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', 'PM_0_18', 'png', {
         maxZoom: 18, attribution: 'IGN-F — LiDAR HD MNS (sursol)'
       });
     case 'planign':
-      return ignWMTS('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', 'PM_0_19', 'png', {
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', 'PM_0_19', 'png', {
         maxZoom: 19, attribution: '© IGN — Plan IGN V2'
       });
     case 'bduni':
-      return ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', {
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', {
         maxZoom: 18, attribution: '© IGN — Plan IGN J+1'
       });
     case 'cassini':
-      return ignWMTS('BNF-IGNF_GEOGRAPHICALGRIDSYSTEMS.CASSINI', 'PM_6_14', 'png', {
+      return LV.ignWMTS('BNF-IGNF_GEOGRAPHICALGRIDSYSTEMS.CASSINI', 'PM_6_14', 'png', {
         maxZoom: 14, attribution: 'BNF/IGN — Cassini (XVIIIe)'
       });
     case 'etatmajor':
-      return ignWMTS('GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40', 'PM', 'jpeg', {
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40', 'PM', 'jpeg', {
         maxZoom: 16, attribution: 'IGN — Etat-Major (XIXe)'
       });
     case 'scan50':
-      return ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN50.1950', 'PM_3_15', 'jpeg', {
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN50.1950', 'PM_3_15', 'jpeg', {
         maxZoom: 15, attribution: 'IGN — SCAN50 1950'
       });
     case 'ortho1950':
-      return ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1950-1965', 'PM', 'jpeg', {
+      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1950-1965', 'PM', 'jpeg', {
         maxZoom: 18, attribution: 'IGN — Ortho 1950-1965'
       });
     case 'ortho1965':
-      return ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1965-1980', 'PM', 'jpeg', {
+      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1965-1980', 'PM', 'jpeg', {
         maxZoom: 18, attribution: 'IGN — Ortho 1965-1980'
       });
     case 'hrortho':
-      return ignWMTS('HR.ORTHOIMAGERY.ORTHOPHOTOS', 'PM_6_19', 'jpeg', {
+      return LV.ignWMTS('HR.ORTHOIMAGERY.ORTHOPHOTOS', 'PM_6_19', 'jpeg', {
         maxZoom: 19, attribution: '© IGN — Ortho HR'
       });
     case 'osm':
       return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OSM' });
     case 'scan25':
-      return ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR', 'PM', 'jpeg', { maxZoom: 19, attribution: '© IGN-F' });
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR', 'PM', 'jpeg', { maxZoom: 19, attribution: '© IGN-F' });
     case 'superposed':
       return L.layerGroup([
         L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { maxZoom: 20 }),
-        ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', { maxZoom: 18, opacity: 0.5, attribution: '© Google / IGN — Plan J+1' })
+        LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', { maxZoom: 18, opacity: 0.5, attribution: '© Google / IGN — Plan J+1' })
       ]);
     // ── Espagne (IDEe / IGN-CNIG) ──
     case 'lidar_es':
