@@ -1,125 +1,61 @@
 # SERENDIPPO LiDAR Viewer
 
-Compare **IGN LiDAR HD** with satellite imagery, orthophotos and historical maps — side by side, in the browser. France, Spain and Italy.
+**Side-by-side LiDAR, satellite, orthophotos et cartes historiques dans le navigateur.** Pas de build, pas de clé API, 24 couches.
 
-No build step. No API key. Static files only.
+→ [Ouvrir l'application](https://andyqwartz.github.io/SERENDIPPO-LIDAR-VIEWER)
 
-## Features
+## En un coup d'œil
 
-- Split view (slider) — independent left & right layers
-- 24 backgrounds: France (LiDAR, ortho, plans, Cassini…), Spain (PNOA LiDAR, MDT, MTN), Italy (TINITALY, PCN LiDAR, IGM)
-- Transparent overlays: cadastre, hydro, contours, forests…
-- Search with autocomplete (communes + coordinates)
-- Bookmarks, measure tool, night mode, fullscreen
+- **Split view** — couches gauche/droite indépendantes, slider CSS clip
+- **France** (production) — LiDAR HD IGN, ortho, plans, Cassini, État-Major, SCAN50, orthos 1950-1965-1980
+- **Espagne / Italie** (dev) — PNOA LiDAR, MDT, MTN, TINITALY, PCN WMS, IGM
+- **Overlays** — hydrographie, cadastre, courbes de niveau, limites admin, forêts
+- **Outils** — recherche géographique, bookmarks, mesure, mode nuit, fullscreen, géolocalisation
 
-## Data sources
+## Stack
 
-| Source | Use |
-|--------|-----|
-| [IGN Géoplateforme](https://geoservices.ign.fr/) | LiDAR HD, ortho, plans, cadastre (France) |
-| [IDEe / CNIG](https://www.idee.es/) | LiDAR PNOA, MDT, ortho, MTN historique (Espagne) |
-| [TINITALY / INGV](https://tinitaly.pi.ingv.it/) | MNT 10 m national (Italie) |
-| [Geoportale PCN](http://www.pcn.minambiente.it/) | LiDAR régional, IGM 1:25 000 (Italie) |
-| Google Maps tiles | Satellite / hybrid |
-| Esri | World Imagery |
-| OpenStreetMap | OSM basemap |
-| [api-adresse](https://adresse.data.gouv.fr/) | Geocoding (France) |
+| Technologie | Usage |
+|---|---|
+| [Leaflet](https://leafletjs.com/) 1.9 | Carte, WMTS, WMS |
+| Vanilla JS | ~1500 lignes, zéro dépendance |
+| CSS custom | Thème dark, responsive mobile/desktop |
+| [api-adresse](https://adresse.data.gouv.fr/) | Géocoding communes France |
+| localStorage | Bookmarks persistants |
 
 ## Architecture
 
-### Files
-
 ```
-index.html              Entry point + DOM + script loading order
-css/style.css           Dark theme, responsive (mobile/desktop)
 js/
-  namespace.js          LV namespace — loaded first
-  config.js             LV.CONFIG — defaults, bookmarks, SBS limits
-  constants.js          LV.WMTS, LV.IMG, LV.URL, LV.ATTR (frozen)
-
-  layers.js             Barrel — PANE constants only
-  layers/
-    layerHelpers.js     ignWMTS, gmWMTS, wms3857
-    providerRegistry.js LV.ProviderRegistry — extensible registry
-    providerFactory.js  LV.createLayer — dispatch to providers
-    layerCache.js       LV._sideCache, getSideLayer, setLayerPane
-    layerLabels.js      LV.LAYER_NAMES
-    layerGroups.js      LV.LAYER_GROUPS, SELECTABLE_LAYERS
-
-  providers/
-    france.js           LV.PROV_FR — production providers (France)
-    dev.js              LV.PROV_DEV — dev providers (Spain, Italy)
-
-  map.js                LV.initMap, formatCoord, initHash, mountScaleControl
-  sbs.js                LV.SBS — split slider
-  search.js             LV.Search — geocoding
-  bookmarks.js          LV.Bookmarks — localStorage
-  overlays.js           LV.OVERLAYS — transparent overlays
-
-  ui/
-    panels.js           LV.UI — panel management, positioning
-    toolRegistry.js     LV.TOOLS — tool definitions, registry
-    layerSelects.js     Layer selector init + switchLayer
-  tools.js              Barrel — TOOLS.init
-
-  measure.js            LV.Measure — distance measurement
-  app.js                LV.init — bootstrap sequence
+├── namespace.js        # LV — unique point d'entrée
+├── config.js           # LV.CONFIG — vue par défaut, bookmarks
+├── constants.js        # LV.WMTS, LV.URL, LV.ATTR (frozen)
+├── layers/             # helpers, registry, factory, cache, labels, groups
+├── providers/          # france.js (prod) + dev.js (ES/IT)
+├── ui/                 # panels, toolRegistry, layerSelects
+├── map.js, sbs.js, search.js, bookmarks.js, overlays.js, measure.js
+└── app.js              # bootstrap
 ```
 
-### Provider System
+**Init flow** : `DOMContentLoaded → LV.init() → map → SBS → search → bookmarks → tools → overlays`
 
-```
-LV.createLayer(key)
-  → LV.PROV_FR[key]()    (France — production)
-  → LV.PROV_DEV[key]()   (Spain, Italy — dev)
-  → built-in switch       (satellite, hybrid, arcgis, osm)
-```
+**Provider dispatch** : `LV.createLayer(key) → PROV_FR[key]() | PROV_DEV[key]() | switch global`
 
-Each provider is a function returning a Leaflet layer. The `ProviderRegistry` provides an extensible alternative.
+## Tests
 
-### Initialization Flow
+Ouvre `tests/test.html` dans un navigateur. 30+ tests de régression vanilla JS — namespace, carte, providers, cache, SBS, bookmarks, overlays, UI.
 
-```
-DOMContentLoaded → LV.init()
-  → LV.initMap()            map + panes + layers + hash
-  → LV.SBS.init()           slider + drag
-  → LV.Search.init()        geocoding
-  → LV.Bookmarks.load()     localStorage
-  → LV.Bookmarks.render()   DOM
-  → LV.TOOLS.init()         toolbar + layer selects
-  → LV.OVERLAYS.init()      overlay layers
-  → LV.initPanels()         panel close buttons + Escape
-```
+## Provider status
 
-### Cache
+| Pays | Statut | Note |
+|---|---|---|
+| France | **Production** | Toutes les couches stables |
+| Espagne | Dev | PNOA LiDAR, MDT — partiellement fonctionnel |
+| Italie | Dev | TINITALY, PCN WMS — souvent instable |
 
-```
-LV._sideCache = { left: {}, right: {} }
-LV.getSideLayer(side, key) → cache[side][key] ||= createLayer(key)
-```
+## Données
 
-Simple object cache. No eviction needed for ~24 layers. Prevents duplicate Leaflet layer instances.
+IGN Géoplateforme, IDEe/CNIG, TINITALY/INGV, Geoportale PCN, Google, Esri, OSM.
 
-### Provider Status
+## Licence
 
-| Provider | Status | Notes |
-|----------|--------|-------|
-| France | **Production** | All layers stable |
-| Spain | Dev | PNOA LiDAR, MDT, MTN — partially working |
-| Italy | Dev | TINITALY, PCN WMS, IGM — often unreliable |
-
-## Development
-
-### Testing
-
-Open `tests/test.html` in a browser to run the regression test suite (30+ tests).
-
-### Adding a Provider
-
-1. Add factory function to the appropriate provider file
-2. Add entry to `LAYER_NAMES` and `LAYER_GROUPS`
-3. Or use `LV.ProviderRegistry.register(key, factory, meta)`
-
-## License
-
-Data © respective providers (IGN, Google, Esri, OSM). Code: use freely.
+Données © leurs fournisseurs respectifs. Code : utilisation libre.
