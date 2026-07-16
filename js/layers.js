@@ -6,7 +6,7 @@ LV.PANE_OVERLAYS = 'overlaysPane';
 
 // Helper WMTS IGN (Geoplateforme, PM / EPSG:2154 tiles)
 LV.ignWMTS = function(layer, tms, format, opts) {
-  return L.tileLayer('https://data.geopf.fr/wmts?LAYER=' + layer + '&STYLE=normal&TILEMATRIXSET=' + tms + '&FORMAT=image/' + format + '&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', opts || {});
+  return L.tileLayer(LV.URL.IGN_WMTS + '?LAYER=' + layer + '&STYLE=normal&TILEMATRIXSET=' + tms + '&FORMAT=image/' + format + '&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', opts || {});
 };
 
 // WMTS GoogleMapsCompatible (IDEe, IGN-CNIG Espagne…)
@@ -16,7 +16,7 @@ function gmWMTS(base, layer, style, format, opts) {
     '&LAYER=' + encodeURIComponent(layer) +
     '&STYLE=' + encodeURIComponent(style || 'default') +
     '&FORMAT=' + encodeURIComponent('image/' + format) +
-    '&TILEMATRIXSET=GoogleMapsCompatible' +
+    '&TILEMATRIXSET=' + LV.WMTS.GMC +
     '&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}';
   return L.tileLayer(q, opts || {});
 }
@@ -25,7 +25,7 @@ function gmWMTS(base, layer, style, format, opts) {
 function wms3857(url, layers, opts) {
   return L.tileLayer.wms(url, L.extend({
     layers: layers,
-    format: 'image/png',
+    format: 'image/' + LV.IMG.PNG,
     transparent: true,
     version: '1.3.0',
     crs: L.CRS.EPSG3857
@@ -35,105 +35,105 @@ function wms3857(url, layers, opts) {
 LV.createLayer = function(key) {
   switch (key) {
     case 'lidar':
-      return LV.ignWMTS('IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', 'PM', 'png', {
-        maxZoom: 19, attribution: 'IGN-F — LiDAR HD MNT'
+      return LV.ignWMTS('IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', LV.WMTS.PM, LV.IMG.PNG, {
+        maxZoom: 19, attribution: LV.ATTR.IGN_LIDAR
       });
     case 'arcgis':
-      return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 19, attribution: 'Esri, Maxar, Earthstar'
+      return L.tileLayer(LV.URL.ARCGIS, {
+        maxZoom: 19, attribution: LV.ATTR.ESRI
       });
     case 'satellite':
-      return L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { maxZoom: 20, attribution: '© Google' });
+      return L.tileLayer(LV.URL.GOOGLE_S, { maxZoom: 20, attribution: LV.ATTR.GOOGLE });
     case 'hybrid':
-      return L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { maxZoom: 20, attribution: '© Google' });
+      return L.tileLayer(LV.URL.GOOGLE_Y, { maxZoom: 20, attribution: LV.ATTR.GOOGLE });
     case 'ortho':
-      return L.tileLayer('https://data.geopf.fr/wmts?LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', {
-        maxZoom: 19, attribution: '© IGN-F'
+      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS', LV.WMTS.PM, LV.IMG.JPEG, {
+        maxZoom: 19, attribution: LV.ATTR.IGN
       });
     case 'mns':
-      return LV.ignWMTS('IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', 'PM_0_18', 'png', {
-        maxZoom: 18, attribution: 'IGN-F — LiDAR HD MNS (sursol)'
+      return LV.ignWMTS('IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW', LV.WMTS.PM_0_18, LV.IMG.PNG, {
+        maxZoom: 18, attribution: LV.ATTR.IGN_MNS
       });
     case 'planign':
-      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', 'PM_0_19', 'png', {
-        maxZoom: 19, attribution: '© IGN — Plan IGN V2'
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', LV.WMTS.PM_0_19, LV.IMG.PNG, {
+        maxZoom: 19, attribution: LV.ATTR.IGN_PLAN
       });
     case 'bduni':
-      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', {
-        maxZoom: 18, attribution: '© IGN — Plan IGN J+1'
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', LV.WMTS.PM_0_18, LV.IMG.PNG, {
+        maxZoom: 18, attribution: LV.ATTR.IGN_J1
       });
     case 'cassini':
-      return LV.ignWMTS('BNF-IGNF_GEOGRAPHICALGRIDSYSTEMS.CASSINI', 'PM_6_14', 'png', {
-        maxZoom: 14, attribution: 'BNF/IGN — Cassini (XVIIIe)'
+      return LV.ignWMTS('BNF-IGNF_GEOGRAPHICALGRIDSYSTEMS.CASSINI', LV.WMTS.PM_6_14, LV.IMG.PNG, {
+        maxZoom: 14, attribution: LV.ATTR.IGN_CASSINI
       });
     case 'etatmajor':
-      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40', 'PM', 'jpeg', {
-        maxZoom: 16, attribution: 'IGN — Etat-Major (XIXe)'
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40', LV.WMTS.PM, LV.IMG.JPEG, {
+        maxZoom: 16, attribution: LV.ATTR.IGN_EM
       });
     case 'scan50':
-      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN50.1950', 'PM_3_15', 'jpeg', {
-        maxZoom: 15, attribution: 'IGN — SCAN50 1950'
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN50.1950', LV.WMTS.PM_3_15, LV.IMG.JPEG, {
+        maxZoom: 15, attribution: LV.ATTR.IGN_SCAN50
       });
     case 'ortho1950':
-      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1950-1965', 'PM', 'jpeg', {
-        maxZoom: 18, attribution: 'IGN — Ortho 1950-1965'
+      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1950-1965', LV.WMTS.PM, LV.IMG.JPEG, {
+        maxZoom: 18, attribution: LV.ATTR.IGN_ORTHO50
       });
     case 'ortho1965':
-      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1965-1980', 'PM', 'jpeg', {
-        maxZoom: 18, attribution: 'IGN — Ortho 1965-1980'
+      return LV.ignWMTS('ORTHOIMAGERY.ORTHOPHOTOS.1965-1980', LV.WMTS.PM, LV.IMG.JPEG, {
+        maxZoom: 18, attribution: LV.ATTR.IGN_ORTHO65
       });
     case 'hrortho':
-      return LV.ignWMTS('HR.ORTHOIMAGERY.ORTHOPHOTOS', 'PM_6_19', 'jpeg', {
-        maxZoom: 19, attribution: '© IGN — Ortho HR'
+      return LV.ignWMTS('HR.ORTHOIMAGERY.ORTHOPHOTOS', LV.WMTS.PM_6_19, LV.IMG.JPEG, {
+        maxZoom: 19, attribution: LV.ATTR.IGN_HR
       });
     case 'osm':
-      return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OSM' });
+      return L.tileLayer(LV.URL.OSM, { maxZoom: 19, attribution: LV.ATTR.OSM });
     case 'scan25':
-      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR', 'PM', 'jpeg', { maxZoom: 19, attribution: '© IGN-F' });
+      return LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR', LV.WMTS.PM, LV.IMG.JPEG, { maxZoom: 19, attribution: LV.ATTR.IGN_SCAN25 });
     case 'superposed':
       return L.layerGroup([
-        L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { maxZoom: 20 }),
-        LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', { maxZoom: 18, opacity: 0.5, attribution: '© Google / IGN — Plan J+1' })
+        L.tileLayer(LV.URL.GOOGLE_S, { maxZoom: 20 }),
+        LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.5, attribution: '© Google / IGN — Plan J+1' })
       ]);
     // ── Espagne (IDEe / IGN-CNIG) ──
     case 'lidar_es':
-      return gmWMTS('https://wmts-mapa-lidar.idee.es/lidar', 'EL.GridCoverageDSM', 'default', 'png', {
-        maxZoom: 17, attribution: '© CNIG/IDEe — LiDAR PNOA (MDS 2,5 m)'
+      return gmWMTS(LV.URL.ES_LIDAR, 'EL.GridCoverageDSM', 'default', 'png', {
+        maxZoom: 17, attribution: LV.ATTR.ES_LIDAR
       });
     case 'mdt_es':
-      return gmWMTS('https://servicios.idee.es/wmts/mdt', 'Relieve', 'default', 'jpeg', {
-        maxZoom: 17, attribution: '© CNIG/IDEe — MDT Espagne'
+      return gmWMTS(LV.URL.ES_MDT, 'Relieve', 'default', 'jpeg', {
+        maxZoom: 17, attribution: LV.ATTR.ES_MDT
       });
     case 'es_ortho':
-      return gmWMTS('https://www.ign.es/wmts/pnoa-ma', 'OI.OrthoimageCoverage', 'default', 'jpeg', {
-        maxZoom: 19, attribution: '© CNIG — PNOA ortho'
+      return gmWMTS(LV.URL.ES_PNOA, 'OI.OrthoimageCoverage', 'default', 'jpeg', {
+        maxZoom: 19, attribution: LV.ATTR.ES_ORTHO
       });
     case 'es_mtn50':
-      return gmWMTS('https://www.ign.es/wmts/primera-edicion-mtn', 'mtn50-edicion1', 'default', 'jpeg', {
-        maxZoom: 15, attribution: '© CNIG — MTN50 1re éd. (1875–1968)'
+      return gmWMTS(LV.URL.ES_MTN, 'mtn50-edicion1', 'default', 'jpeg', {
+        maxZoom: 15, attribution: LV.ATTR.ES_MTN50
       });
     case 'es_mtn25':
-      return gmWMTS('https://www.ign.es/wmts/primera-edicion-mtn', 'mtn25-edicion1', 'default', 'jpeg', {
-        maxZoom: 16, attribution: '© CNIG — MTN25 1re éd. (1975–2003)'
+      return gmWMTS(LV.URL.ES_MTN, 'mtn25-edicion1', 'default', 'jpeg', {
+        maxZoom: 16, attribution: LV.ATTR.ES_MTN25
       });
     // ── Italie (TINITALY / PCN / IGM) ──
     case 'mdt_it':
-      return wms3857('https://tinitaly.pi.ingv.it/TINItaly_1_1/wms', 'tinitaly_hshd', {
-        maxZoom: 15, attribution: '© INGV — TINITALY MNT 10 m (hillshade)'
+      return wms3857(LV.URL.IT_TINITALY, 'tinitaly_hshd', {
+        maxZoom: 15, attribution: LV.ATTR.IT_MDT
       });
     case 'lidar_it':
       return L.layerGroup([
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_PIEMONTE.map', 'EL.LIDAR.PIEMONTE.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Piémont' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_LOMBARDIA.map', 'EL.LIDAR.LOMBARDIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Lombardie' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_VENETO.map', 'EL.LIDAR.VENETO.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Vénétie' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_TOSCANA.map', 'EL.LIDAR.TOSCANA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Toscane' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_LAZIO.map', 'EL.LIDAR.LAZIO.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Latium' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_SICILIA.map', 'EL.LIDAR.SICILIA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Sicile' }),
-        wms3857('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/LIDAR_SARDEGNA.map', 'EL.LIDAR.SARDEGNA.2x2.DTM', { maxZoom: 18, attribution: '© PCN — LiDAR Sardaigne' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_PIEMONTE.map', 'EL.LIDAR.PIEMONTE.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Piémont' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_LOMBARDIA.map', 'EL.LIDAR.LOMBARDIA.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Lombardie' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_VENETO.map', 'EL.LIDAR.VENETO.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Vénétie' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_TOSCANA.map', 'EL.LIDAR.TOSCANA.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Toscane' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_LAZIO.map', 'EL.LIDAR.LAZIO.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Latium' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_SICILIA.map', 'EL.LIDAR.SICILIA.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Sicile' }),
+        wms3857(LV.URL.IT_PCN + 'LIDAR_SARDEGNA.map', 'EL.LIDAR.SARDEGNA.2x2.DTM', { maxZoom: 18, attribution: LV.ATTR.IT_LIDAR + 'Sardaigne' }),
       ]);
     case 'it_igm25':
-      return wms3857('https://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map', 'CB.IGM25000.32,CB.IGM25000.33', {
-        maxZoom: 16, transparent: false, attribution: '© IGM / MASE — Carte 1:25 000'
+      return wms3857(LV.URL.IT_IGM, 'CB.IGM25000.32,CB.IGM25000.33', {
+        maxZoom: 16, transparent: false, attribution: LV.ATTR.IT_IGM
       });
     default:
       return null;

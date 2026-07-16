@@ -19,19 +19,19 @@ LV.OVERLAYS.init = function() {
     var layer = null;
     switch (id) {
       case 'hydro':
-        layer = LV.ignWMTS('HYDROGRAPHY.HYDROGRAPHY', 'PM', 'png', { maxZoom: 19, opacity: 0.55, attribution: 'IGN — Hydrographie' }); break;
+        layer = LV.ignWMTS('HYDROGRAPHY.HYDROGRAPHY', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.55, attribution: 'IGN — Hydrographie' }); break;
       case 'cadastre':
-        layer = LV.ignWMTS('CADASTRALPARCELS.PARCELLAIRE_EXPRESS', 'PM', 'png', { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Cadastre' }); break;
+        layer = LV.ignWMTS('CADASTRALPARCELS.PARCELLAIRE_EXPRESS', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Cadastre' }); break;
       case 'contour':
-        layer = LV.ignWMTS('ELEVATION.CONTOUR.LINE', 'PM', 'png', { maxZoom: 19, opacity: 0.65, attribution: 'IGN — Courbes niveau' }); break;
+        layer = LV.ignWMTS('ELEVATION.CONTOUR.LINE', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.65, attribution: 'IGN — Courbes niveau' }); break;
       case 'limites':
-        layer = LV.ignWMTS('ADMINEXPRESS-COG-CARTO-PE.LATEST', 'PM', 'png', { maxZoom: 19, opacity: 0.45, attribution: 'IGN — Limites admin' }); break;
+        layer = LV.ignWMTS('ADMINEXPRESS-COG-CARTO-PE.LATEST', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.45, attribution: 'IGN — Limites admin' }); break;
       case 'forets':
-        layer = LV.ignWMTS('FORETS.PUBLIQUES', 'PM', 'png', { maxZoom: 19, opacity: 0.4, attribution: 'ONF — Forets' }); break;
+        layer = LV.ignWMTS('FORETS.PUBLIQUES', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.4, attribution: 'ONF — Forets' }); break;
       case 'ignj1':
-        layer = LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', 'PM_0_18', 'png', { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Plan J+1' }); break;
+        layer = LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Plan J+1' }); break;
       case 'alti':
-        layer = LV.ignWMTS('ELEVATION.ELEVATIONGRIDCOVERAGE', 'PM', 'png', { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Altimetrie' }); break;
+        layer = LV.ignWMTS('ELEVATION.ELEVATIONGRIDCOVERAGE', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Altimetrie' }); break;
     }
     if (layer) {
       layer.options.pane = LV.PANE_OVERLAYS;
