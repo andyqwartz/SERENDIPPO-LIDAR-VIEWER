@@ -22,7 +22,24 @@ LV.initPanels = function() {
   });
 
   var bmAdd = document.getElementById('bm-add-btn');
-  if (bmAdd) bmAdd.onclick = LV.Bookmarks.add;
+  if (bmAdd) bmAdd.onclick = function() {
+    var activeTab = document.querySelector('#bookmarksPanel .tab-btn.active');
+    if (activeTab && activeTab.getAttribute('data-tab') === 'tracks') {
+      // Onglet Tracks → upload GPX
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.gpx';
+      input.onchange = function() {
+        if (input.files && input.files.length > 0) {
+          LV.TrackManager.loadFile(input.files[0]);
+        }
+      };
+      input.click();
+    } else {
+      // Onglet Vues → ajouter un bookmark
+      LV.Bookmarks.add();
+    }
+  };
 
   var bmClose = document.getElementById('bm-close');
   if (bmClose) bmClose.onclick = function() {
