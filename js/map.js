@@ -1,5 +1,10 @@
 /* SERENDIPPO-LIDAR-VIEWER — Initialisation de la carte */
 
+/**
+ * Crée la carte Leaflet, configure les panes SBS,
+ * ajoute les couches initiales, le scale control et le hash routing.
+ * @returns {L.Map}
+ */
 LV.initMap = function() {
   var cfg = LV.CONFIG;
   var map = LV.map = L.map('map', {
@@ -48,10 +53,18 @@ LV.initMap = function() {
   return map;
 };
 
+/**
+ * Formate des coordonnees en "lat, lng" avec 5 decimales.
+ * @param {L.LatLng} latlng
+ * @returns {string}
+ */
 LV.formatCoord = function(latlng) {
   return latlng.lat.toFixed(5) + ', ' + latlng.lng.toFixed(5);
 };
 
+/**
+ * Initialise le hash URL (#lat,lng,zoom) et le met a jour au deplacement.
+ */
 LV.initHash = function() {
   var h = location.hash.replace('#', '').split(',');
   if (h.length === 3) {
@@ -65,6 +78,9 @@ LV.initHash = function() {
   });
 };
 
+/**
+ * Deplace le scale control Leaflet dans le slot de la barre de statut.
+ */
 LV.mountScaleControl = function() {
   var scale = document.querySelector('.leaflet-control-scale');
   var slot = document.getElementById('scaleSlot');

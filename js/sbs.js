@@ -1,7 +1,14 @@
 /* SERENDIPPO-LIDAR-VIEWER — Side-by-Side slider custom (CSS clip) + verrouillage */
 
+/**
+ * Module SBS : gestion du split slider.
+ * Utilise le CSS clip sur les panes gauche/droite.
+ * Supporte drag (souris) et tap (tactile) sans conflit.
+ */
 LV.SBS = {
+  /** Position courante en pourcentage (0-100) */
   pct: 50,
+  /** Si true, les deux cartes bougent ensemble */
   locked: true,
   handle: null,
   divider: null,
@@ -10,7 +17,7 @@ LV.SBS = {
   touchToggled: false
 };
 
-// ── Initialisation ──
+/** Initialisation : references DOM, clip, ecouteurs */
 LV.SBS.init = function() {
   LV.SBS.handle = document.getElementById('sbs-handle');
   LV.SBS.divider = document.getElementById('sbs-divider');
@@ -20,7 +27,7 @@ LV.SBS.init = function() {
   LV.SBS.bindDragAndToggle();
 };
 
-// ── CSS clip update ──
+/** Met a jour le clip CSS des deux panes et la position du handle. */
 LV.SBS.updateClip = function() {
   var leftPane = LV.map.getPane(LV.PANE_LEFT);
   var rightPane = LV.map.getPane(LV.PANE_RIGHT);
@@ -36,16 +43,22 @@ LV.SBS.updateClip = function() {
   LV.SBS.divider.style.left = LV.SBS.pct + '%';
 };
 
+/**
+ * Fixe la position du slider.
+ * @param {number} p - Pourcentage (0-100), clamped dans [sbsMin, sbsMax]
+ */
 LV.SBS.setPct = function(p) {
   LV.SBS.pct = Math.min(LV.CONFIG.sbsMax, Math.max(LV.CONFIG.sbsMin, p));
   LV.SBS.updateClip();
 };
 
+/** Bascule le verrouillage (synchro gauche/droite). */
 LV.SBS.toggle = function() {
   LV.SBS.locked = !LV.SBS.locked;
   LV.SBS.applyLock();
 };
 
+/** Applique l'etat de verrouillage au handle et au drag de la carte. */
 LV.SBS.applyLock = function() {
   var h = LV.SBS.handle;
   if (!h) return;
@@ -64,7 +77,10 @@ LV.SBS.applyLock = function() {
   }
 };
 
-// ── Drag + Tap unifié (evite le conflit click/drag) ──
+/**
+ * Bind les evenements de drag (souris + tactile) et de click/toggle.
+ * Utilise un flag touchToggled pour eviter le double-declenchement.
+ */
 LV.SBS.bindDragAndToggle = function() {
   var h = LV.SBS.handle;
 
@@ -86,7 +102,6 @@ LV.SBS.bindDragAndToggle = function() {
     LV.SBS.setPct(pct);
   }
 
-  // Mouse: onEnd nettoie, le toggle se fait via click
   function onEnd() {
     if (!LV.SBS.dragging) return;
     LV.SBS.dragging = false;
@@ -94,7 +109,6 @@ LV.SBS.bindDragAndToggle = function() {
     if (!LV.SBS.locked) LV.map.dragging.disable();
   }
 
-  // Touch: onEnd + toggle si pas de drag
   function onTouchEnd() {
     if (!LV.SBS.dragging) return;
     var moved = LV.SBS.dragMoved;
@@ -107,7 +121,6 @@ LV.SBS.bindDragAndToggle = function() {
     }
   }
 
-  // Click = toggle (desktop seulement, ignore apres touch)
   h.addEventListener('click', function() {
     if (LV.SBS.touchToggled) {
       LV.SBS.touchToggled = false;

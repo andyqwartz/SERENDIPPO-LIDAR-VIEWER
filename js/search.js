@@ -1,13 +1,20 @@
-/* SERENDIPPO-LIDAR-VIEWER — Recherche géographique */
+/* SERENDIPPO-LIDAR-VIEWER — Recherche geographique */
 
+/**
+ * Module de recherche geographique.
+ * Utilise l'API api-adresse.data.gouv.fr pour le geocoding de communes.
+ * Supporte les coordonnees decimales (lat, lng).
+ */
 LV.Search = {
   input: null,
   results: null,
   btn: null,
   debounceId: null,
+  /** Delai de debounce en ms pour l'autocomplete */
   debounceMs: 300
 };
 
+/** Initialisation : bind des evenements du champ de recherche. */
 LV.Search.init = function() {
   LV.Search.input = document.getElementById('searchInput');
   LV.Search.results = document.getElementById('searchResults');
@@ -36,14 +43,24 @@ LV.Search.init = function() {
   });
 };
 
+/**
+ * Teste si la chaine est des coordonnees.
+ * @param {string} q
+ * @returns {boolean}
+ */
 LV.Search.isCoords = function(q) {
   return /^-?\d+\.?\d*\s*[,;:\s]\s*-?\d+\.?\d*$/.test(q);
 };
 
+/** Cache le panneau de resultats. */
 LV.Search.hide = function() {
   if (LV.Search.results) LV.Search.results.style.display = 'none';
 };
 
+/**
+ * Requete API adresse.
+ * @param {string} q - Terme de recherche
+ */
 LV.Search.fetch = function(q) {
   var box = LV.Search.results;
   fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&type=municipality&limit=5')
@@ -58,6 +75,10 @@ LV.Search.fetch = function(q) {
     });
 };
 
+/**
+ * Affiche les resultats de recherche.
+ * @param {Array} feats - Tableau de features GeoJSON
+ */
 LV.Search.render = function(feats) {
   var box = LV.Search.results;
   box.innerHTML = '';
@@ -81,6 +102,7 @@ LV.Search.render = function(feats) {
   box.style.display = 'block';
 };
 
+/** Execute la recherche : coordonnees directes ou requete API. */
 LV.Search.do = function() {
   var q = LV.Search.input.value.trim();
   if (!q) return;
