@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Factory de couches Leaflet */
-var LV = window.LV || {};
 
 /**
  * Point d'entrée unique pour créer une couche.

@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Selecteurs de couches gauche/droite */
-var LV = window.LV || {};
 
 /**
  * Initialise les menus déroulants de sélection de couches.

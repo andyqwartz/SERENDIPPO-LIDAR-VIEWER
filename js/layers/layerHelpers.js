@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Helpers de création de couches */
-var LV = window.LV || {};
 
 /**
  * WMTS IGN (Geoplateforme, PM / EPSG:2154 tiles)

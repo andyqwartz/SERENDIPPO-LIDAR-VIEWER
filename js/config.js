@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Configuration globale */
-var LV = window.LV || {};
 
 LV.CONFIG = {
   // Vue par defaut : Base aerienne 128 Metz-Frescaty (nord-est)

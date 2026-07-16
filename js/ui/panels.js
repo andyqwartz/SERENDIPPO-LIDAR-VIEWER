@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Gestion des panneaux (LV.UI) */
-var LV = window.LV || {};
 
 LV.UI = {
   MOBILE_MQ: '(max-width: 768px)',

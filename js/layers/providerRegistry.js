@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Registry des providers */
-var LV = window.LV || {};
 
 /**
  * Registre central des providers.

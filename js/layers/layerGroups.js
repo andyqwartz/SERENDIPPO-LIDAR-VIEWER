@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Groupes de couches (pour les menus) */
-var LV = window.LV || {};
 
 /**
  * Groupes de couches affichés dans les menus déroulants.

@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Providers France (production) */
-var LV = window.LV || {};
 
 /**
  * FR providers — production stable.

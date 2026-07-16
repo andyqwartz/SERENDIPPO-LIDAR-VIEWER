@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Cache de couches */
-var LV = window.LV || {};
 
 /**
  * Cache simple par côté (left/right).

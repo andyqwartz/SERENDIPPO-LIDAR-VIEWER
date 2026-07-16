@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Registre d'outils toolbar */
-var LV = window.LV || {};
 
 /**
  * Registre déclaratif des outils de la toolbar.

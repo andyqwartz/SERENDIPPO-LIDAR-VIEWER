@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Mesure deux points + distance relative à l'échelle */
-var LV = window.LV || {};
 
 LV.Measure = {
   active: false,

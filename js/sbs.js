@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Side-by-Side slider custom (CSS clip) + verrouillage */
-var LV = window.LV || {};
 
 LV.SBS = {
   pct: 50,

@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Noms des couches */
-var LV = window.LV || {};
 
 /** @type {Object<string, string>} Mapping clé → nom affiché */
 LV.LAYER_NAMES = {

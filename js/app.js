@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Bootstrap */
-var LV = window.LV || {};
 
 LV.init = function() {
   LV.initMap();

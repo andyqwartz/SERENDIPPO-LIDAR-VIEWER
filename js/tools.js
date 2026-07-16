@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Barrel: charge tous les sous-modules UI */
-var LV = window.LV || {};
 
 /**
  * Initialisation de tous les outils.

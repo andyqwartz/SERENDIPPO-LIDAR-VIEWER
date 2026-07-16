@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Recherche géographique */
-var LV = window.LV || {};
 
 LV.Search = {
   input: null,

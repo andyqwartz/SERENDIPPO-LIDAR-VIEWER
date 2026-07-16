@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Initialisation de la carte */
-var LV = window.LV || {};
 
 LV.initMap = function() {
   var cfg = LV.CONFIG;

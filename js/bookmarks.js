@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Bookmarks (mémoire locale) */
-var LV = window.LV || {};
 
 LV.Bookmarks = {
   STORAGE_KEY: 'lidar_viewer_bookmarks',

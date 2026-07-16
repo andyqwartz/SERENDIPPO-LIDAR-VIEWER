@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Constantes partagées */
-var LV = window.LV || {};
 
 // ── WMTS matrix sets ──
 LV.WMTS = Object.freeze({

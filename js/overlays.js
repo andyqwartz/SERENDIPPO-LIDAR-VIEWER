@@ -1,5 +1,4 @@
 /* SERENDIPPO-LIDAR-VIEWER — Overlays transparents (au-dessus des deux panes) */
-var LV = window.LV || {};
 
 LV.OVERLAYS = {};
 

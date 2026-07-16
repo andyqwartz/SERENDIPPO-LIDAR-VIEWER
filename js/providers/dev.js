@@ -1,6 +1,5 @@
 /* SERENDIPPO-LIDAR-VIEWER — Providers dev (Espagne, Italie) */
 /* ⚠ EXPERIMENTAL — not production-ready. Use at your own risk. */
-var LV = window.LV || {};
 
 /**
  * Dev providers — Spain and Italy.
