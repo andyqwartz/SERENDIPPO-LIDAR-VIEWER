@@ -6,3 +6,4 @@ Thumbs.db
 memory-bank/
 .hermes/
 .codebase-memory/
+tests/
