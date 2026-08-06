@@ -1,26 +1,25 @@
-/* SERENDIPPO-LIDAR-VIEWER — Recherche geographique */
+/* SERENDIPPO-LIDAR-VIEWER — Recherche geographique améliorée */
 
 /**
  * Module de recherche geographique.
- * Utilise l'API api-adresse.data.gouv.fr pour le geocoding de communes.
- * Supporte les coordonnees decimales (lat, lng).
+ * Utilise api-adresse.data.gouv.fr + IGN Geocodage (dédoublonné, cache).
  */
 LV.Search = {
   input: null,
   results: null,
-  btn: null,
   debounceId: null,
-  /** Delai de debounce en ms pour l'autocomplete */
-  debounceMs: 300
+  debounceMs: 30,
+  _cache: {}
 };
 
-/** Initialisation : bind des evenements du champ de recherche. */
+/** Initialisation */
 LV.Search.init = function() {
   LV.Search.input = document.getElementById('searchInput');
   LV.Search.results = document.getElementById('searchResults');
   LV.Search.btn = document.getElementById('searchBtn');
 
   LV.Search.btn.onclick = LV.Search.do;
+  
   LV.Search.input.onkeydown = function(e) {
     if (e.key === 'Enter') LV.Search.do();
   };
@@ -32,95 +31,153 @@ LV.Search.init = function() {
       return;
     }
     LV.Search.debounceId = setTimeout(function() {
-      LV.Search.fetch(q);
+      LV.Search._search(q);
     }, LV.Search.debounceMs);
   });
-
   document.addEventListener('click', function(e) {
-    if (!e.target.closest('.search-wrap') && LV.Search.results) {
-      LV.Search.hide();
-    }
+    if (!e.target.closest('.search-wrap')) LV.Search.hide();
   });
 };
 
-/**
- * Teste si la chaine est des coordonnees.
- * @param {string} q
- * @returns {boolean}
- */
+/** Teste si la chaine est des coordonnees */
 LV.Search.isCoords = function(q) {
   return /^-?\d+\.?\d*\s*[,;:\s]\s*-?\d+\.?\d*$/.test(q);
 };
 
-/** Cache le panneau de resultats. */
+/** Cache les résultats */
 LV.Search.hide = function() {
   if (LV.Search.results) LV.Search.results.style.display = 'none';
 };
 
-/**
- * Requete API adresse.
- * @param {string} q - Terme de recherche
- */
-LV.Search.fetch = function(q) {
-  var box = LV.Search.results;
-  fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&type=municipality&limit=5')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      LV.Search.render(data.features || []);
-    })
-    .catch(function(err) {
-      console.warn('[Search]', err);
-      box.innerHTML = '<div class="no-result">Erreur réseau</div>';
-      box.style.display = 'block';
-    });
-};
+/** Recherche principale avec 2 sources */
+LV.Search.do = LV.Search._onInput;
 
-/**
- * Affiche les resultats de recherche.
- * @param {Array} feats - Tableau de features GeoJSON
- */
-LV.Search.render = function(feats) {
-  var box = LV.Search.results;
-  box.innerHTML = '';
-  if (!feats.length) {
-    box.innerHTML = '<div class="no-result">Aucun résultat</div>';
-    box.style.display = 'block';
+/** Debounce handler */
+LV.Search._onInput = function() {
+  var q = LV.Search.input.value.trim();
+  if (q.length < 2) return;
+  
+  if (LV.Search.isCoords(q)) {
+    LV.Search._goToCoords(q);
     return;
   }
-  feats.forEach(function(f) {
-    var p = f.properties || {}, g = f.geometry || {};
-    var c = g.coordinates || [0, 0];
-    var d = document.createElement('div');
-    d.innerHTML = '<strong>' + (p.name || '') + '</strong> <span class="city">' + (p.city || p.context || '') + '</span>';
-    d.onclick = function() {
-      LV.map.flyTo([c[1], c[0]], 15, { duration: 1.1 });
-      LV.Search.input.value = (p.name || '') + (p.city ? ', ' + p.city : '');
-      LV.Search.hide();
-    };
-    box.appendChild(d);
-  });
-  box.style.display = 'block';
+  LV.Search._search(q);
 };
 
-/** Execute la recherche : coordonnees directes ou requete API. */
-LV.Search.do = function() {
-  var q = LV.Search.input.value.trim();
-  if (!q) return;
-
-  if (LV.Search.isCoords(q)) {
-    var coordMatch = q.match(/^(-?\d+\.?\d*)\s*[,;:\s]\s*(-?\d+\.?\d*)$/);
-    var lat = parseFloat(coordMatch[1]);
-    var lng = parseFloat(coordMatch[2]);
-    if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
-      LV.map.setView([lat, lng], 16);
-      L.marker([lat, lng]).addTo(LV.map)
-        .bindPopup('Position: ' + LV.formatCoord({lat: lat, lng: lng}))
-        .openPopup();
-      LV.Search.hide();
-      LV.Search.input.value = lat.toFixed(5) + ', ' + lng.toFixed(5);
-      return;
-    }
+/** Recherche avec cache et sources multiples */
+LV.Search._search = function(q) {
+  var self = this;
+  var cacheKey = q.toLowerCase();
+  
+  if (this._cache[cacheKey]) {
+    this._results = this._cache[cacheKey];
+    this._render();
+    return;
   }
 
-  LV.Search.fetch(q);
+  // Deux APIs fonctionnelles
+  var urlAdresse = 'https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&limit=6';
+  var urlIGN = 'https://data.geopf.fr/geocodage/search?q=' + encodeURIComponent(q) + '&limit=6';
+
+  Promise.allSettled([
+    fetch(urlAdresse).then(function(r) { return r.json(); }),
+    fetch(urlIGN).then(function(r) { return r.json(); })
+  ]).then(function(settled) {
+    var results = [];
+
+    // Résultats api-adresse
+    var adVal = settled[0].value;
+    if (settled[0].status === 'fulfilled' && adVal && adVal.features) {
+      adVal.features.forEach(function(f) {
+        results.push({
+          label: f.properties.label || '',
+          type: f.properties.type || 'lieu',
+          lat: f.geometry.coordinates[1],
+          lon: f.geometry.coordinates[0],
+          score: f.properties.score || 0.5,
+          badge: 'AD'
+        });
+      });
+    }
+
+    // Résultats IGN Geocodage (dédoublonnés)
+    var ignVal = settled[1].value;
+    if (settled[1].status === 'fulfilled' && ignVal && ignVal.features) {
+      ignVal.features.forEach(function(f) {
+        var lat = f.geometry.coordinates[1];
+        var lon = f.geometry.coordinates[0];
+        var dup = results.some(function(r) {
+          return Math.abs(r.lat - lat) < 0.002 && Math.abs(r.lon - lon) < 0.002;
+        });
+        if (!dup) {
+          results.push({
+            label: f.properties.label || f.properties.name || '',
+            type: f.properties.type || 'lieu',
+            lat: lat,
+            lon: lon,
+            score: f.properties.score || 0.5,
+            badge: 'IGN'
+          });
+        }
+      });
+    }
+
+    // Tri par score décroissant, AD favorisé
+    results.sort(function(a, b) {
+      var sa = a.score + (a.badge === 'AD' ? 0.2 : 0);
+      var sb = b.score + (b.badge === 'AD' ? 0.2 : 0);
+      return sb - sa;
+    });
+
+    self._results = results.slice(0, 12);
+    self._cache[cacheKey] = self._results;
+    self._render();
+  }).catch(function(err) {
+    console.warn('[Search]', err);
+    LV.Search.results.innerHTML = '<div class="no-result">Erreur réseau, réessayez</div>';
+    LV.Search.results.style.display = 'block';
+  });
+};
+
+/** Rendu dropdown - compatible CSS existant */
+LV.Search._render = function() {
+  var self = this;
+  this.results.innerHTML = '';
+
+  if (!this._results.length) {
+    this.results.innerHTML = '<div class="no-result">Aucun résultat trouvé</div>';
+    this.results.style.display = 'block';
+    return;
+  }
+
+  this._results.forEach(function(r) {
+    var item = document.createElement('div');
+    item.innerHTML = '<strong>' + r.label + '</strong> <span class="city">' + r.badge + '</span>';
+    item.onclick = function() { self._goTo(r); };
+    self.results.appendChild(item);
+  });
+
+  this.results.style.display = 'block';
+};
+
+/** Navigation vers résultat */
+LV.Search._goTo = function(r) {
+  LV.map.flyTo([r.lat, r.lon], 15, { duration: 1.1 });
+  LV.Search.input.value = r.label;
+  LV.Search.hide();
+};
+
+/** Coordonnées directes */
+LV.Search._goToCoords = function(q) {
+  var coordMatch = q.match(/^(-?\d+\.?\d*)\s*[,;:\s]\s*(-?\d+\.?\d*)$/);
+  var lat = parseFloat(coordMatch[1]);
+  var lng = parseFloat(coordMatch[2]);
+  if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+    LV.map.setView([lat, lng], 16);
+    L.marker([lat, lng]).addTo(LV.map)
+      .bindPopup('Position: ' + lat.toFixed(5) + ', ' + lng.toFixed(5))
+      .openPopup();
+    LV.Search.hide();
+    LV.Search.input.value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+  }
 };
