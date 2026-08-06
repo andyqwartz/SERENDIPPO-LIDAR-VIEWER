@@ -8,8 +8,15 @@
 LV.LAYER_GROUPS = [
   {
     label: 'France',
-    keys: ['lidar', 'mns', 'ortho', 'hrortho', 'planign', 'bduni', 'cassini', 'etatmajor',
-      'scan50', 'ortho1950', 'ortho1965', 'scan25', 'superposed']
+    keys: ['lidar', 'mns', 'ortho', 'hrortho', 'planign', 'bduni', 'scan25', 'superposed']
+  },
+  {
+    label: 'Historique',
+    keys: ['cassini', 'etatmajor', 'scan50', 'ortho1950', 'ortho1965']
+  },
+  {
+    label: 'Europe',
+    keys: ['be_vl', 'be_wa', 'ch', 'gb_en', 'cz', 'sk', 'lu', 'se', 'no']
   },
   {
     label: 'Espagne',

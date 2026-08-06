@@ -30,11 +30,11 @@ LV.URLSync = {
       LV.URLSync.update();
     });
 
-    // Surcharger SBS.setPct pour trigger update
+    // Surcharger SBS.setPct pour trigger update (throttlé -> pas de lag pendant le drag)
     var origSetPct = LV.SBS.setPct;
     LV.SBS.setPct = function(p) {
       origSetPct(p);
-      LV.URLSync.update();
+      LV.URLSync.throttledUpdate();
     };
 
     // Surcharger OVERLAYS.toggle
@@ -69,6 +69,26 @@ LV.URLSync = {
     };
     var hash = LV.URLSync._encode(params);
     location.hash = hash;
+  },
+
+  /** Timers pour les mises a jour haute frequence (drag du slider). */
+  _throttleTimer: null,
+  _throttlePending: false,
+
+  /**
+   * Mise a jour throttle du hash : coalesce les appels rapides (mousemove)
+   * pour ne pas ecrire location.hash a chaque frame, avec un flush en fin.
+   */
+  throttledUpdate: function() {
+    LV.URLSync._throttlePending = true;
+    if (LV.URLSync._throttleTimer) return;
+    LV.URLSync._throttleTimer = setTimeout(function() {
+      LV.URLSync._throttleTimer = null;
+      if (LV.URLSync._throttlePending) {
+        LV.URLSync._throttlePending = false;
+        LV.URLSync.update();
+      }
+    }, 120);
   },
 
   /**

@@ -30,7 +30,18 @@ LV.URL = Object.freeze({
   ES_MTN:   'https://www.ign.es/wmts/primera-edicion-mtn',
   IT_TINITALY: 'https://tinitaly.pi.ingv.it/TINItaly_1_1/wms',
   IT_PCN:   'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/servizi-LiDAR/',
-  IT_IGM:   'https://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map'
+  IT_IGM:   'https://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map',
+
+  // ── Europe (relief LiDAR/DTM publics) ──
+  EU_BE_VL: 'https://geo.api.vlaanderen.be/DHMV/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=DHMV_II_HILL_25cm&STYLE=&FORMAT=image/png&TILEMATRIXSET=GoogleMapsVL&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
+  EU_CH:    'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissalti3d-reliefschattierung/default/current/3857/{z}/{x}/{y}.png',
+  EU_BE_WA: 'https://geoservices.wallonie.be/arcgis/services/RELIEF/WALLONIE_MNT_2021_2022_HILLSHADE/MapServer/WMSServer',
+  EU_GB:    'https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m/wms',
+  EU_CZ:    'https://ags.cuzk.gov.cz/arcgis2/services/dmr5g/ImageServer/WMSServer',
+  EU_SK:    'https://zbgisws.skgeodesy.sk/zbgis_dmr_wms/service.svc/get',
+  EU_LU:    'https://wms.geoportail.lu/public_map_layers/service',
+  EU_SE:    'https://minkarta.lantmateriet.se/map/hojdmodell/',
+  EU_NO:    'https://hoydedata.no/arcgis/rest/services/DTM/ImageServer/exportImage'
 });
 
 // ── Attributions ──
@@ -57,5 +68,15 @@ LV.ATTR = Object.freeze({
   ES_MTN25: '© CNIG — MTN25 1re éd. (1975–2003)',
   IT_MDT:   '© INGV — TINITALY MNT 10 m (hillshade)',
   IT_LIDAR: '© PCN — LiDAR ',
-  IT_IGM:   '© IGM / MASE — Carte 1:25 000'
+  IT_IGM:   '© IGM / MASE — Carte 1:25 000',
+
+  EU_BE_VL: '© Informatie Vlaanderen',
+  EU_BE_WA: '© SPW',
+  EU_CH:    '© swisstopo',
+  EU_GB:    '© Environment Agency — OGL v3.0',
+  EU_CZ:    '© ČÚZK',
+  EU_SK:    '© ÚGKK SR',
+  EU_LU:    '© ACT / geoportail.lu',
+  EU_SE:    '© Lantmäteriet',
+  EU_NO:    '© Kartverket (CC BY 4.0)'
 });

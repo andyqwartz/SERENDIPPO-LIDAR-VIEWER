@@ -15,6 +15,8 @@ LV.createLayer = function(key) {
   if (LV.PROV_FR && LV.PROV_FR[key]) return LV.PROV_FR[key]();
   // Dev (Espagne, Italie)
   if (LV.PROV_DEV && LV.PROV_DEV[key]) return LV.PROV_DEV[key]();
+  // Europe (relief LiDAR/DTM publics)
+  if (LV.PROV_EU && LV.PROV_EU[key]) return LV.PROV_EU[key]();
   // Global (built-in)
   switch (key) {
     case 'arcgis':

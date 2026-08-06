@@ -92,7 +92,7 @@ body {
 .search-results .city { color: var(--text3); font-size: 11px; }
 .search-results .no-result { color: var(--text3); font-style: italic; }
 
-/* ── Toolbar verticale a droite (comme daevorn.html) ── */
+/* ── Toolbar verticale a droite ── */
 #toolbar {
   position: fixed;
   right: 10px;
