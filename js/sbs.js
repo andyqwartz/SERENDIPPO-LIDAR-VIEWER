@@ -25,7 +25,6 @@ LV.SBS.init = function() {
   LV.SBS.updateClip();
   LV.map.on('move zoom resize viewreset', LV.SBS.updateClip);
   LV.SBS.bindDragAndToggle();
-  LV.SBS.bindOpacity();
 };
 
 /** Met a jour le clip CSS des deux panes et la position du handle. */
@@ -136,54 +135,4 @@ LV.SBS.bindDragAndToggle = function() {
   h.addEventListener('touchstart', onStart, { passive: false });
   window.addEventListener('touchmove', onMove, { passive: false });
   window.addEventListener('touchend', onTouchEnd);
-};
-
-/* ════ SBS opacité par côté (drag vertical) ════ */
-
-/** Opacité courante par côté (0-1). */
-LV.SBS.opacity = { left: 1, right: 1 };
-
-/**
- * Applique l'opacité à la couche active d'un côté.
- * @param {string} side - 'left' | 'right'
- * @param {number} v - 0..1
- */
-LV.SBS.setOpacity = function(side, v) {
-  v = Math.max(0, Math.min(1, v));
-  LV.SBS.opacity[side] = v;
-  var key = side === 'left' ? LV.leftKey : LV.rightKey;
-  var layer = LV.getSideLayer(side, key);
-  if (!layer) return;
-  if (layer.eachLayer) {
-    layer.eachLayer(function(l) { if (l.setOpacity) l.setOpacity(v); });
-  } else if (layer.setOpacity) {
-    layer.setOpacity(v);
-  }
-  var el = document.querySelector('.sbs-op[data-side="' + side + '"]');
-  if (el) el.setAttribute('data-pct', Math.round(v * 100) + '%');
-};
-
-/** Bind le drag vertical des poignées d'opacité. */
-LV.SBS.bindOpacity = function() {
-  document.querySelectorAll('.sbs-op').forEach(function(h) {
-    var side = h.getAttribute('data-side');
-    var dragging = false;
-
-    function apply(e) {
-      var r = LV.map.getContainer().getBoundingClientRect();
-      var y = e.touches ? e.touches[0].clientY : e.clientY;
-      var pct = 1 - ((y - r.top) / r.height);   // haut = 1 (opaque), bas = 0
-      LV.SBS.setOpacity(side, pct);
-    }
-    function start(e) { dragging = true; h.classList.add('dragging'); e.preventDefault(); apply(e); }
-    function move(e) { if (!dragging) return; apply(e); }
-    function end() { dragging = false; h.classList.remove('dragging'); }
-
-    h.addEventListener('mousedown', start);
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', end);
-    h.addEventListener('touchstart', start, { passive: false });
-    window.addEventListener('touchmove', move, { passive: false });
-    window.addEventListener('touchend', end);
-  });
 };
