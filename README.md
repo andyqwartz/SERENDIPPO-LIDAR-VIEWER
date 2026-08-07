@@ -13,6 +13,7 @@ SERENDIPPO is an independent relief viewer for Europe. It lets you compare high-
 ## Features
 
 - **Split view** — independent left/right layers with a draggable CSS-clip slider (mobile + desktop)
+- **Per-side opacity blend** — each half stacks its own source on top of the other (active over, other underneath); two horizontal sliders (bottom of each half on desktop, above the dock on mobile) fade the active layer to reveal the other source beneath
 - **34 base layers** across Europe + **4 transparent overlays**
 - **Relief everywhere** — LiDAR, DTM/DEM and hillshade from 9 European countries via official feeds
 - **Historical cartography** — Cassini (XVIIIe), État-Major (XIXe), SCAN50 1950, orthophotos 1950–1980
