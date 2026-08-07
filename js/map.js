@@ -24,8 +24,13 @@ LV.initMap = function() {
   LV.leftKey = cfg.leftKey;
   LV.rightKey = cfg.defaultRight;
 
-  // Empile les deux sources dans chaque pane (active au-dessus, autre dessous)
-  LV.rebuildStack();
+  var lLayer = LV.getSideLayer('left', LV.leftKey);
+  LV.setLayerPane(lLayer, LV.PANE_LEFT);
+  lLayer.addTo(map);
+
+  var rLayer = LV.getSideLayer('right', LV.rightKey);
+  LV.setLayerPane(rLayer, LV.PANE_RIGHT);
+  rLayer.addTo(map);
 
   // Info coordonnees
   map.on('mousemove', function(e) {

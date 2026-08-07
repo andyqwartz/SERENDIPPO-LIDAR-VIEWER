@@ -48,10 +48,12 @@ LV.TOOLS.switchLayer = function(side) {
   var newKey = document.getElementById(selId).value;
   if (oldKey === newKey) return;
 
+  map.removeLayer(LV.getSideLayer(side, oldKey));
   LV[keyProp] = newKey;
 
-  // Réassemble l'empilement des deux panes (active au-dessus, autre dessous)
-  LV.rebuildStack();
+  var layer = LV.getSideLayer(side, newKey);
+  LV.setLayerPane(layer, pane);
+  layer.addTo(map);
   LV.SBS.updateClip();
 };
 

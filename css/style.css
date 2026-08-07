@@ -398,42 +398,6 @@ body {
 #sbs-handle:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(74,158,255,.25); }
 #sbs-handle.active { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(74,158,255,.25); }
 
-/* ── SBS opacité (vrai slider horizontal, un par moitié, en bas) ── */
-.sbs-op {
-  position: fixed; z-index: 1001;
-  width: 34vw; min-width: 110px; max-width: 240px;
-  height: 26px;
-  bottom: 60px;
-  margin: 0;
-  -webkit-appearance: none; appearance: none;
-  background: transparent;
-  cursor: pointer; touch-action: none;
-}
-.sbs-op::-webkit-slider-runnable-track {
-  height: 5px; border-radius: 3px;
-  background: rgba(26,26,26,.75);
-  border: 1px solid rgba(255,255,255,.25);
-}
-.sbs-op::-webkit-slider-thumb {
-  -webkit-appearance: none; appearance: none;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: #1a1a1a;
-  border: 2px solid var(--accent);
-  margin-top: -7px;
-  box-shadow: var(--shadow);
-}
-.sbs-op::-moz-range-track {
-  height: 5px; border-radius: 3px;
-  background: rgba(26,26,26,.75); border: 1px solid rgba(255,255,255,.25);
-}
-.sbs-op::-moz-range-thumb {
-  width: 16px; height: 16px; border-radius: 50%;
-  background: #1a1a1a; border: 2px solid var(--accent);
-}
-.sbs-op:hover::-webkit-slider-thumb { background: #222; }
-#sbs-opL { left: 25%; transform: translateX(-50%); }
-#sbs-opR { left: 75%; transform: translateX(-50%); }
-
 /* ── Measure ── */
 .measure-label {
   background: rgba(0,0,0,.8); color: #fff;
@@ -650,13 +614,6 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
     border-radius: 50%;
     touch-action: none;
   }
-  .sbs-op {
-    width: 44vw;
-    bottom: calc(var(--dock-h) + 14px);
-    height: 30px;
-  }
-  .sbs-op::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -9px; }
-  .sbs-op::-moz-range-thumb { width: 20px; height: 20px; }
 
   /* ── Leaflet zoom — sous la barre de recherche, à gauche ── */
   .leaflet-top.leaflet-left {
