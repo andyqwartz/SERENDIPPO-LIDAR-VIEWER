@@ -651,8 +651,8 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
     touch-action: none;
   }
   .sbs-op {
-    width: 44vw;
-    bottom: calc(var(--dock-h) + 14px);
+    width: 36vw;
+    bottom: calc(var(--dock-h) + 44px);
     height: 30px;
   }
   .sbs-op::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -9px; }
