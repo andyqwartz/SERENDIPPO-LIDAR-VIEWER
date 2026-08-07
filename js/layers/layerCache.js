@@ -32,4 +32,9 @@ LV.setLayerPane = function(layer, pane) {
   } else {
     layer.options.pane = pane;
   }
+  // Re-applique l'opacité courante du côté lors d'un changement de couche
+  var side = pane === LV.PANE_LEFT ? 'left' : (pane === LV.PANE_RIGHT ? 'right' : null);
+  if (side && LV.SBS && LV.SBS.opacity && LV.SBS.opacity[side] !== undefined) {
+    LV.SBS.setOpacity(side, LV.SBS.opacity[side]);
+  }
 };
