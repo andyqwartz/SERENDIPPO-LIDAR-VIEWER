@@ -193,12 +193,10 @@ LV._switchSide = function(side, key) {
   var oldKey = LV[keyProp];
   if (oldKey === key) return;
 
-  map.removeLayer(LV.getSideLayer(side, oldKey));
   LV[keyProp] = key;
 
-  var layer = LV.getSideLayer(side, key);
-  LV.setLayerPane(layer, pane);
-  layer.addTo(map);
+  // Réassemble l'empilement des deux panes (active au-dessus, autre dessous)
+  if (LV.rebuildStack) LV.rebuildStack();
   if (LV.SBS) LV.SBS.updateClip();
 
   // Mettre à jour le select
