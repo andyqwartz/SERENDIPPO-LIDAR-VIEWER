@@ -33,3 +33,48 @@ LV.setLayerPane = function(layer, pane) {
     layer.options.pane = pane;
   }
 };
+
+/** Couches actuellement empilées (top/bottom) dans chaque pane. */
+LV._stack = null;
+
+/**
+ * Rassemble l'empilement des deux sources dans chaque pane.
+ * Chaque pane contient deux couches : la source active de ce côté AU-DESSUS,
+ * et la source de l'autre côté EN DESSOUS.
+ * Doit être appelé APRÈS que LV.map et les panes existent (dans LV.SBS.init,
+ * pour éviter de toucher à des handles non encore assignés).
+ */
+LV.rebuildStack = function() {
+  var map = LV.map;
+  if (!map) return;
+  var LKEY = LV.leftKey, RKEY = LV.rightKey;
+  var LP = LV.PANE_LEFT, RP = LV.PANE_RIGHT;
+
+  if (LV._stack) {
+    LV._stack.forEach(function(l) { if (l && map.hasLayer(l)) map.removeLayer(l); });
+  }
+  LV._stack = [];
+
+  function attach(layer, pane, isTop) {
+    if (!layer) return;
+    LV.setLayerPane(layer, pane);
+    if (isTop) { if (layer.setZIndex) layer.setZIndex(30); }
+    else       { if (layer.setZIndex) layer.setZIndex(10); }
+    if (!map.hasLayer(layer)) layer.addTo(map);
+    if (isTop && layer.bringToFront) layer.bringToFront();
+    else if (!isTop && layer.bringToBack) layer.bringToBack();
+    LV._stack.push(layer);
+  }
+
+  // pane gauche : gauche (active) top, droite bottom
+  attach(LV.getSideLayer('left', RKEY), LP, false);
+  attach(LV.getSideLayer('left', LKEY), LP, true);
+  // pane droit : droite (active) top, gauche bottom
+  attach(LV.getSideLayer('right', LKEY), RP, false);
+  attach(LV.getSideLayer('right', RKEY), RP, true);
+
+  if (LV.SBS) {
+    if (LV.SBS.applyToCurrent) LV.SBS.applyToCurrent();
+    if (LV.SBS.updateClip) LV.SBS.updateClip();
+  }
+};

@@ -188,18 +188,13 @@ LV.URLSync = {
 LV._switchSide = function(side, key) {
   var isLeft = side === 'left';
   var keyProp = isLeft ? 'leftKey' : 'rightKey';
-  var pane = isLeft ? LV.PANE_LEFT : LV.PANE_RIGHT;
-  var map = LV.map;
   var oldKey = LV[keyProp];
   if (oldKey === key) return;
 
-  map.removeLayer(LV.getSideLayer(side, oldKey));
   LV[keyProp] = key;
 
-  var layer = LV.getSideLayer(side, key);
-  LV.setLayerPane(layer, pane);
-  layer.addTo(map);
-  if (LV.SBS) LV.SBS.updateClip();
+  // Réassemble l'empilement des deux panes (les 2 côtés changent de top/bottom)
+  if (LV.rebuildStack) LV.rebuildStack();
 
   // Mettre à jour le select
   var selId = isLeft ? 'leftLayerSelect' : 'rightLayerSelect';

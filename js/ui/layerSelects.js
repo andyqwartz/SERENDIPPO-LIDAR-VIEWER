@@ -42,19 +42,14 @@ LV.TOOLS.switchLayer = function(side) {
   var isLeft = side === 'left';
   var keyProp = isLeft ? 'leftKey' : 'rightKey';
   var selId = isLeft ? 'leftLayerSelect' : 'rightLayerSelect';
-  var pane = isLeft ? LV.PANE_LEFT : LV.PANE_RIGHT;
-  var map = LV.map;
   var oldKey = LV[keyProp];
   var newKey = document.getElementById(selId).value;
   if (oldKey === newKey) return;
 
-  map.removeLayer(LV.getSideLayer(side, oldKey));
   LV[keyProp] = newKey;
 
-  var layer = LV.getSideLayer(side, newKey);
-  LV.setLayerPane(layer, pane);
-  layer.addTo(map);
-  LV.SBS.updateClip();
+  // Réassemble l'empilement des deux panes (les 2 côtés changent de top/bottom)
+  if (LV.rebuildStack) LV.rebuildStack();
 };
 
 LV.TOOLS.switchLeftLayer = function() { LV.TOOLS.switchLayer('left'); };

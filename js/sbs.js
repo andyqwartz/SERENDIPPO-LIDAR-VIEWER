@@ -22,13 +22,18 @@ LV.SBS.init = function() {
   LV.SBS.handle = document.getElementById('sbs-handle');
   LV.SBS.divider = document.getElementById('sbs-divider');
   LV.SBS.applyLock();
+  // Empile les deux sources par pane + applique opacités/opacités sliders.
+  // Doit venir APRÈS que handle/divider sont assignés (updateClip les lit).
+  if (LV.rebuildStack) LV.rebuildStack();
   LV.SBS.updateClip();
   LV.map.on('move zoom resize viewreset', LV.SBS.updateClip);
   LV.SBS.bindDragAndToggle();
+  LV.SBS.bindOpacity();
 };
 
 /** Met a jour le clip CSS des deux panes et la position du handle. */
 LV.SBS.updateClip = function() {
+  if (!LV.SBS.handle || !LV.SBS.divider) return; // panes/handles pas prêts
   var leftPane = LV.map.getPane(LV.PANE_LEFT);
   var rightPane = LV.map.getPane(LV.PANE_RIGHT);
   if (!leftPane || !rightPane) return;
@@ -135,4 +140,49 @@ LV.SBS.bindDragAndToggle = function() {
   h.addEventListener('touchstart', onStart, { passive: false });
   window.addEventListener('touchmove', onMove, { passive: false });
   window.addEventListener('touchend', onTouchEnd);
+};
+
+/* ════ SBS opacité par côté (vrais sliders horizontaux) ════ */
+
+/** Opacité courante de la source active par côté (0-1). */
+LV.SBS.opacity = { left: 1, right: 1 };
+
+/**
+ * Applique l'opacité à la couche ACTIVE (top) d'un côté.
+ * La couche de l'autre côté (bottom) reste pleine : la transparence de l'active
+ * révèle l'autre source EN DESSOUS.
+ * @param {string} side - 'left' | 'right'
+ * @param {number} v - 0..1
+ */
+LV.SBS.setOpacity = function(side, v) {
+  v = Math.max(0, Math.min(1, v));
+  LV.SBS.opacity[side] = v;
+  var key = side === 'left' ? LV.leftKey : LV.rightKey;
+  var layer = LV.getSideLayer(side, key);
+  if (!layer) return;
+  if (layer.eachLayer) {
+    layer.eachLayer(function(l) { if (l.setOpacity) l.setOpacity(v); });
+  } else if (layer.setOpacity) {
+    layer.setOpacity(v);
+  }
+};
+
+/** Réapplique les opacités des deux côtés + synchronise les sliders. */
+LV.SBS.applyToCurrent = function() {
+  LV.SBS.setOpacity('left', LV.SBS.opacity.left);
+  LV.SBS.setOpacity('right', LV.SBS.opacity.right);
+  ['left', 'right'].forEach(function(side) {
+    var el = document.querySelector('.sbs-op[data-side="' + side + '"]');
+    if (el) el.value = Math.round(LV.SBS.opacity[side] * 100);
+  });
+};
+
+/** Bind les vrais sliders <input type=range> d'opacité. */
+LV.SBS.bindOpacity = function() {
+  document.querySelectorAll('.sbs-op').forEach(function(el) {
+    var side = el.getAttribute('data-side');
+    function onChange() { LV.SBS.setOpacity(side, Number(el.value) / 100); }
+    el.addEventListener('input', onChange);
+    el.value = Math.round(LV.SBS.opacity[side] * 100);
+  });
 };

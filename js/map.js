@@ -24,13 +24,8 @@ LV.initMap = function() {
   LV.leftKey = cfg.leftKey;
   LV.rightKey = cfg.defaultRight;
 
-  var lLayer = LV.getSideLayer('left', LV.leftKey);
-  LV.setLayerPane(lLayer, LV.PANE_LEFT);
-  lLayer.addTo(map);
-
-  var rLayer = LV.getSideLayer('right', LV.rightKey);
-  LV.setLayerPane(rLayer, LV.PANE_RIGHT);
-  rLayer.addTo(map);
+  // NB : l'empilement des couches est fait dans LV.SBS.init() (via LV.rebuildStack),
+  // APRÈS que le DOM/panes sont prêts. On ne le lance pas ici.
 
   // Info coordonnees
   map.on('mousemove', function(e) {
