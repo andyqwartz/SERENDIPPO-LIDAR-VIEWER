@@ -89,9 +89,11 @@ LV.Screenshot = {
         out.toBlob(function(blob) {
           if (!blob) return;
           var url = URL.createObjectURL(blob);
+          var c = LV.map.getCenter();
           var a = document.createElement('a');
           a.href = url;
-          a.download = 'openlidar.png';
+          a.download = 'OpenLiDAR_' + (LV.leftKey || 'left') + '_' + (LV.rightKey || 'right') +
+            '_' + c.lat.toFixed(4) + '_' + c.lng.toFixed(4) + '.png';
           document.body.appendChild(a);
           a.click();
           setTimeout(function() {
