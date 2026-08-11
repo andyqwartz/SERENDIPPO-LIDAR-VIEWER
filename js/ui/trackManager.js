@@ -185,7 +185,7 @@ LV.TrackManager = {
     container.innerHTML = '';
 
     if (LV.TrackManager.tracks.length === 0) {
-      container.innerHTML = '<div class="no-result">Glissez un fichier GPX ici</div>';
+      container.innerHTML = '<div class="no-result">Drop a GPX file here</div>';
       return;
     }
 
@@ -197,9 +197,9 @@ LV.TrackManager = {
         '<span class="track-color" style="background:' + t.color + '"></span>' +
         '<span class="track-name">' + LV.Bookmarks.esc(t.name) + '</span>' +
         '<span class="track-actions">' +
-          '<button class="track-vis" title="Visibilité">' + (t.visible ? 'V' : 'H') + '</button>' +
+          '<button class="track-vis" title="Visibility">' + (t.visible ? 'V' : 'H') + '</button>' +
           '<button class="track-zoom" title="Zoom">Z</button>' +
-          '<button class="track-del" title="Supprimer">Del</button>' +
+          '<button class="track-del" title="Delete">Del</button>' +
         '</span>';
       div.querySelector('.track-vis').onclick = function() { LV.TrackManager.toggleVisibility(t.id); };
       div.querySelector('.track-zoom').onclick = function() { LV.TrackManager.zoomTo(t.id); };

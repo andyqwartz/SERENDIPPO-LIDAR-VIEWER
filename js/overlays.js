@@ -3,10 +3,10 @@
 LV.OVERLAYS = {};
 
 LV.OVERLAY_DEFS = {
-  hydro:   { name: 'Reseau hydro',      layer: null, active: false },
-  cadastre:{ name: 'Cadastre',          layer: null, active: false },
-  contour: { name: 'Courbes niveau',    layer: null, active: false },
-  ignj1:   { name: 'Plan IGN J+1',      layer: null, active: false },
+  hydro:   { name: 'Hydro network',      layer: null, active: false },
+  cadastre:{ name: 'Cadastre',           layer: null, active: false },
+  contour: { name: 'Contour lines',      layer: null, active: false },
+  ignj1:   { name: 'IGN map J+1',        layer: null, active: false },
 };
 
 LV.OVERLAYS.init = function() {
@@ -15,13 +15,13 @@ LV.OVERLAYS.init = function() {
     var layer = null;
     switch (id) {
       case 'hydro':
-        layer = LV.ignWMTS('HYDROGRAPHY.HYDROGRAPHY', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.55, attribution: 'IGN — Hydrographie' }); break;
+        layer = LV.ignWMTS('HYDROGRAPHY.HYDROGRAPHY', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.55, attribution: 'IGN — Hydrography' }); break;
       case 'cadastre':
         layer = LV.ignWMTS('CADASTRALPARCELS.PARCELLAIRE_EXPRESS', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.5, attribution: 'IGN — Cadastre' }); break;
       case 'contour':
-        layer = LV.ignWMTS('ELEVATION.CONTOUR.LINE', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.65, attribution: 'IGN — Courbes niveau' }); break;
+        layer = LV.ignWMTS('ELEVATION.CONTOUR.LINE', LV.WMTS.PM, LV.IMG.PNG, { maxZoom: 19, opacity: 0.65, attribution: 'IGN — Contour lines' }); break;
       case 'ignj1':
-        layer = LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Plan J+1' }); break;
+        layer = LV.ignWMTS('GEOGRAPHICALGRIDSYSTEMS.MAPS.BDUNI.J1', LV.WMTS.PM_0_18, LV.IMG.PNG, { maxZoom: 18, opacity: 0.5, attribution: 'IGN — Map J+1' }); break;
     }
     if (layer) {
       layer.options.pane = LV.PANE_OVERLAYS;

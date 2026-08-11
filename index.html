@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -32,20 +32,20 @@
 
 <div id="sbs-divider"></div>
 <div id="sbs-handle"></div>
-<input type="range" id="sbs-opL" class="sbs-op" data-side="left" min="0" max="100" value="100" title="Opacité source gauche (révèle la droite dessous)">
-<input type="range" id="sbs-opR" class="sbs-op" data-side="right" min="0" max="100" value="100" title="Opacité source droite (révèle la gauche dessous)">
+<input type="range" id="sbs-opL" class="sbs-op" data-side="left" min="0" max="100" value="100" title="Left source opacity (reveals the right one below)">
+<input type="range" id="sbs-opR" class="sbs-op" data-side="right" min="0" max="100" value="100" title="Right source opacity (reveals the left one below)">
 
 <div class="search-wrap">
   <div class="search-row">
-    <input id="searchInput" placeholder="Commune ou coordonnees..." autocomplete="off">
-    <button id="searchBtn" type="button">Chercher</button>
+    <input id="searchInput" placeholder="Place or coordinates..." autocomplete="off">
+    <button id="searchBtn" type="button">Search</button>
   </div>
   <div class="search-results" id="searchResults"></div>
 </div>
 
 <footer class="bottom-bar">
   <div class="bottom-chip layer-select layer-select--left">
-    <span>Gauche:</span>
+    <span>Left:</span>
     <select id="leftLayerSelect"></select>
   </div>
 
@@ -71,47 +71,54 @@
   </div>
 
   <div class="bottom-chip layer-select layer-select--right">
-    <span>Droite:</span>
+    <span>Right:</span>
     <select id="rightLayerSelect"></select>
   </div>
 </footer>
 
 <div id="toolbar">
-  <button id="btn-night" type="button" title="Nuit">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12.5 9a6 6 0 0 1-5.5-8.5 6.5 6.5 0 1 0 7 7.5A6 6 0 0 1 12.5 9z"/></svg>
+  <button id="btn-night" type="button" title="Night">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
   </button>
-  <button id="btn-geoloc" type="button" title="Position">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>
-  </button>
-  <div class="sep"></div>
-  <button id="btn-bookmarks" type="button" title="Lieux">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 1.5h8v13l-4-3.5-4 3.5v-13z"/></svg>
-  </button>
-  <button id="btn-marker" type="button" title="+Marqueur">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1c-2.8 0-5 2.2-5 5 0 3.8 5 9 5 9s5-5.2 5-9c0-2.8-2.2-5-5-5z"/><circle cx="8" cy="6" r="1.5" fill="currentColor"/></svg>
-  </button>
-  <button id="btn-measure" type="button" title="Mesure">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 13l2-2 2 2 2-2 2 2 2-2 2 2 2-2"/><path d="M1 13V3h14v10"/></svg>
+  <button id="btn-geoloc" type="button" title="Locate">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
   </button>
   <div class="sep"></div>
-  <button id="btn-overlays" type="button" title="Calques">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l6-2 6 2-6 2-6-2z"/><path d="M2 8l6-2 6 2-6 2-6-2z"/><path d="M2 12l6-2 6 2-6 2-6-2z"/></svg>
+  <button id="btn-bookmarks" type="button" title="Places">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21V3z"/></svg>
   </button>
-  <button id="btn-reset" type="button" title="Reset">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 6.5A5.5 5.5 0 0 1 13 7.5M12.5 9.5A5.5 5.5 0 0 1 3 8.5"/><path d="M2.5 4v3h3M13.5 12V9h-3"/></svg>
+  <button id="btn-marker" type="button" title="+Marker">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3.9 0-7 3.1-7 7 0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7z"/><circle cx="12" cy="9" r="2.2" fill="currentColor"/></svg>
+  </button>
+  <button id="btn-measure" type="button" title="Measure">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l3-3 3 3 3-3 3 3 3-3 3 3"/><path d="M3 18V5h18v13"/></svg>
+  </button>
+  <div class="sep"></div>
+  <button id="btn-overlays" type="button" title="Overlays">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l9-3 9 3-9 3-9-3z"/><path d="M3 12l9-3 9 3-9 3-9-3z"/><path d="M3 18l9-3 9 3-9 3-9-3z"/></svg>
+  </button>
+  <button id="btn-reset" type="button" title="Reset view">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.3M3 4v5h5"/></svg>
+  </button>
+  <div class="sep"></div>
+  <button id="btn-export" type="button" title="Export PNG">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+  </button>
+  <button id="btn-info" type="button" title="About & data">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 12v4"/></svg>
   </button>
 </div>
 
 <div id="bookmarksPanel">
   <div class="panel-header">
-    <span>Lieux memorises</span>
+    <span>Saved places</span>
     <div class="panel-header-actions">
-      <button class="bm-add-btn" id="bm-add-btn" type="button">+ Ajouter</button>
-      <button class="panel-close" id="bm-close" type="button" title="Fermer">&#x2715;</button>
+      <button class="bm-add-btn" id="bm-add-btn" type="button">+ Add</button>
+      <button class="panel-close" id="bm-close" type="button" title="Close">&#x2715;</button>
     </div>
   </div>
   <div class="panel-tabs">
-    <button class="tab-btn active" data-tab="views">Vues</button>
+    <button class="tab-btn active" data-tab="views">Views</button>
     <button class="tab-btn" data-tab="tracks">Tracks</button>
   </div>
   <div class="tab-content tab-content--views active" id="bookmarksList"></div>
@@ -120,10 +127,23 @@
 
 <div id="overlaysPanel">
   <div class="panel-header">
-    <span>Calques superposables</span>
-    <button class="panel-close" id="ol-close" type="button" title="Fermer">&#x2715;</button>
+    <span>Overlay layers</span>
+    <button class="panel-close" id="ol-close" type="button" title="Close">&#x2715;</button>
   </div>
   <div class="overlays-list"></div>
+</div>
+
+<div id="infoPanel">
+  <div class="panel-header">
+    <span>About &amp; data</span>
+    <button class="panel-close" id="info-close" type="button" title="Close">&#x2715;</button>
+  </div>
+  <div class="panel-body">
+    <p><strong>OpenLiDAR</strong> — side-by-side relief viewer: compare LiDAR / DTM and satellite imagery across Europe, with overlays, bookmarks and measurement.</p>
+    <p>LiDAR &amp; DTM data © <a href="https://geoservices.ign.fr/" target="_blank" rel="noopener">IGN</a> (Géoservices, LICENCE OUVERTE) and official European national mapping agencies · Map data © OpenStreetMap / Esri / CARTO / Google.</p>
+    <p>Independent open-source project, not affiliated with any data provider.</p>
+    <p class="info-links"><a href="data.html" target="_blank">Sources &amp; data</a> · <a href="privacy.html" target="_blank">Privacy policy</a></p>
+  </div>
 </div>
 
 <div id="measureTip"></div>

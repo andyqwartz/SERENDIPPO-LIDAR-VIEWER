@@ -373,6 +373,35 @@ body {
 .overlay-item:hover { background: var(--accent-dim); }
 .overlay-item input[type="checkbox"] { accent-color: var(--accent); }
 
+/* ── About & data Panel ── */
+#infoPanel {
+  position: fixed;
+  z-index: 3000;
+  width: 360px;
+  max-width: calc(100vw - 80px);
+  max-height: min(70vh, 420px);
+  overflow-y: auto;
+  display: none;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+}
+#infoPanel p {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+#infoPanel a { color: var(--accent); }
+#infoPanel .info-links {
+  display: flex;
+  gap: 12px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
 /* ── SBS ── */
 #sbs-divider {
   position: absolute; top: 0; bottom: 0;
@@ -617,7 +646,8 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
 
   /* ── Panneaux → bottom sheet ── */
   #bookmarksPanel,
-  #overlaysPanel {
+  #overlaysPanel,
+  #infoPanel {
     top: auto !important;
     bottom: calc(var(--dock-h) + 56px) !important;
     left: 10px !important;
@@ -748,7 +778,7 @@ body.night [class*="leaflet-pane"] .leaflet-tile-loaded {
 
 /* ── Drag & drop indicator ── */
 body.drag-over::after {
-  content: 'DEPOSER UN FICHIER GPX';
+  content: 'DROP A GPX FILE';
   position: fixed;
   inset: 0;
   z-index: 99999;

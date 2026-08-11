@@ -1,0 +1,22 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, "Segoe UI", sans-serif;
+  background: #0e1116; color: #d0d7de;
+  font-size: 15px; line-height: 1.6;
+  padding: 32px 16px;
+}
+main { max-width: 760px; margin: 0 auto; }
+h1 { font-size: 1.7rem; margin-bottom: 16px; color: #fff; }
+h2 { font-size: 1.15rem; margin: 24px 0 8px; color: #663AE0; }
+p, li { margin: 6px 0; color: #b6c0cc; }
+ul { padding-left: 20px; }
+code {
+  background: #1c222c; border: 1px solid #2b3440;
+  padding: 1px 6px; border-radius: 4px; font-size: 0.9em;
+}
+a { color: #663AE0; }
+.badge {
+  display: inline-block; background: #663AE0; color: #fff;
+  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+}
+.meta { color: #5b6773; font-size: 13px; }

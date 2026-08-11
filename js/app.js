@@ -19,6 +19,7 @@ LV.initPanels = function() {
     if (e.key !== 'Escape') return;
     LV.UI.closePanel('bookmarksPanel', 'btn-bookmarks');
     LV.UI.closePanel('overlaysPanel', 'btn-overlays');
+    LV.UI.closePanel('infoPanel', 'btn-info');
   });
 
   var bmAdd = document.getElementById('bm-add-btn');
@@ -49,6 +50,11 @@ LV.initPanels = function() {
   var olClose = document.getElementById('ol-close');
   if (olClose) olClose.onclick = function() {
     LV.UI.closePanel('overlaysPanel', 'btn-overlays');
+  };
+
+  var infoClose = document.getElementById('info-close');
+  if (infoClose) infoClose.onclick = function() {
+    LV.UI.closePanel('infoPanel', 'btn-info');
   };
 };
 

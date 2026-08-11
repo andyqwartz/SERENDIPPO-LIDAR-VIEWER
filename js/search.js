@@ -134,7 +134,7 @@ LV.Search._search = function(q) {
     self._render();
   }).catch(function(err) {
     console.warn('[Search]', err);
-    LV.Search.results.innerHTML = '<div class="no-result">Erreur réseau, réessayez</div>';
+    LV.Search.results.innerHTML = '<div class="no-result">Network error, try again</div>';
     LV.Search.results.style.display = 'block';
   });
 };
@@ -145,7 +145,7 @@ LV.Search._render = function() {
   this.results.innerHTML = '';
 
   if (!this._results.length) {
-    this.results.innerHTML = '<div class="no-result">Aucun résultat trouvé</div>';
+    this.results.innerHTML = '<div class="no-result">No results found</div>';
     this.results.style.display = 'block';
     return;
   }

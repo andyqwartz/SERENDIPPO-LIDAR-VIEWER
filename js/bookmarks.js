@@ -37,9 +37,9 @@ LV.Bookmarks.save = function() {
 LV.Bookmarks.add = function() {
   var c = LV.map.getCenter();
   var z = LV.map.getZoom();
-  var name = prompt('Nom du lieu :', '');
+  var name = prompt('Place name:', '');
   if (name === null) return;
-  if (!name.trim()) name = 'Marqueur';
+  if (!name.trim()) name = 'Marker';
   LV.Bookmarks.list.push({
     id: 'loc_' + Date.now(),
     name: name,
@@ -97,7 +97,7 @@ LV.Bookmarks.editNotes = function(id) {
 LV.Bookmarks.editName = function(id) {
   var b = LV.Bookmarks.list.find(function(x) { return x.id === id; });
   if (!b) return;
-  var newName = prompt('Renommer :', b.name);
+  var newName = prompt('Rename:', b.name);
   if (newName && newName.trim()) {
     b.name = newName.trim();
     LV.Bookmarks.save();
@@ -116,13 +116,13 @@ LV.Bookmarks.render = function() {
     div.setAttribute('data-id', b.id);
     div.innerHTML =
       '<div class="bm-header">' +
-        '<span class="bm-name" title="Éditer le nom">' + LV.Bookmarks.esc(b.name) + '</span>' +
+        '<span class="bm-name" title="Edit name">' + LV.Bookmarks.esc(b.name) + '</span>' +
         '<span class="bm-coords">' + b.lat.toFixed(4) + ', ' + b.lng.toFixed(4) + '</span>' +
         '<span class="bm-actions">' +
-          '<button class="bm-go" title="Aller a">Go</button>' +
-          '<button class="bm-editname" title="Renommer">Ren</button>' +
-          '<button class="bm-editnotes" title="Editer note">Note</button>' +
-          '<button class="bm-del" title="Supprimer">Del</button>' +
+          '<button class="bm-go" title="Go to">Go</button>' +
+          '<button class="bm-editname" title="Rename">Ren</button>' +
+          '<button class="bm-editnotes" title="Edit note">Note</button>' +
+          '<button class="bm-del" title="Delete">Del</button>' +
         '</span>' +
       '</div>' +
       '<div class="bm-body">' +

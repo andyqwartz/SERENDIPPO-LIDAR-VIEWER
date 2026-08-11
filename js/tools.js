@@ -22,7 +22,7 @@ LV.TOOLS.init = function() {
       color: '#fff',
       weight: 2,
       fillOpacity: 0.8
-    }).addTo(LV.map).bindPopup('Vous êtes ici').openPopup();
+    }).addTo(LV.map).bindPopup('You are here').openPopup();
   });
 
   // Selecteurs de couches gauche / droite

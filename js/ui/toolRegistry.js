@@ -6,39 +6,56 @@
  */
 LV.TOOLS = {
   'btn-night': {
-    label: 'Mode nuit',
+    label: 'Night mode',
     on: function(btn) {
       document.body.classList.toggle('night');
       btn.style.background = document.body.classList.contains('night') ? 'rgba(0,0,0,.2)' : '';
     }
   },
   'btn-geoloc': {
-    label: 'Ma position',
+    label: 'My location',
     on: function() {
       LV.map.locate({ setView: true, maxZoom: 16 });
     }
   },
   'btn-bookmarks': {
-    label: 'Lieux mémorisés',
+    label: 'Saved places',
     on: function(btn) {
       LV.Bookmarks.togglePanel();
     }
   },
   'btn-reset': {
-    label: 'Reinitialiser la vue',
+    label: 'Reset view',
     on: function() {
       var v = LV.CONFIG.defaultView;
       LV.map.setView([v.lat, v.lng], v.zoom);
     }
   },
+  'btn-export': {
+    label: 'Export PNG',
+    on: function() {
+      var done = function() { LV.Screenshot.capture(); };
+      if (LV.Screenshot._html2canvasLoaded) { done(); return; }
+      LV.Screenshot.init();
+      var t = setInterval(function() {
+        if (LV.Screenshot._html2canvasLoaded) { clearInterval(t); done(); }
+      }, 120);
+    }
+  },
+  'btn-info': {
+    label: 'About & data',
+    on: function() {
+      LV.UI.togglePanel('infoPanel', 'btn-info');
+    }
+  },
   'btn-overlays': {
-    label: 'Calques superposables',
+    label: 'Overlay layers',
     on: function() {
       LV.OVERLAYS.togglePanel();
     }
   },
   'btn-marker': {
-    label: 'Placer un marqueur',
+    label: 'Place a marker',
     on: function(btn) {
       if (btn.classList.contains('pinned')) {
         btn.classList.remove('pinned');
@@ -47,14 +64,14 @@ LV.TOOLS = {
         return;
       }
       LV.TOOLS._markerHandler = function(e) {
-        var name = prompt('Nommer ce lieu :', '');
+        var name = prompt('Name this place:', '');
         if (name === null) {
           btn.classList.remove('pinned');
           LV.map.off('click', LV.TOOLS._markerHandler);
           LV.TOOLS._markerHandler = null;
           return;
         }
-        if (!name.trim()) name = 'Marqueur';
+        if (!name.trim()) name = 'Marker';
         var m = L.marker(e.latlng).addTo(LV.map)
           .bindPopup(name + '<br>' + LV.formatCoord(e.latlng))
           .openPopup();

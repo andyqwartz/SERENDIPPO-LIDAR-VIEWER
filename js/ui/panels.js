@@ -79,7 +79,8 @@ LV.UI = {
   repositionOpenPanels: function() {
     [
       ['overlaysPanel', 'btn-overlays'],
-      ['bookmarksPanel', 'btn-bookmarks']
+      ['bookmarksPanel', 'btn-bookmarks'],
+      ['infoPanel', 'btn-info']
     ].forEach(function(p) {
       var panel = document.getElementById(p[0]);
       var btn = document.getElementById(p[1]);

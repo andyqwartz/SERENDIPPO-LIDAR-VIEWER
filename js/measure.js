@@ -120,15 +120,15 @@ LV.Measure.showDistance = function() {
       iconAnchor: [60, 20]
     })
   }).addTo(LV.map).bindPopup(
-    'Distance : ' + distStr + ' ' + unit + '<br>' +
-    'Zoom actuel : ' + LV.map.getZoom() + '<br>' +
-    'Pixels à l\'écran : ' + Math.round(pxDist) + 'px'
+    'Distance: ' + distStr + ' ' + unit + '<br>' +
+    'Current zoom: ' + LV.map.getZoom() + '<br>' +
+    'Pixels on screen: ' + Math.round(pxDist) + 'px'
   );
 
   // Afficher brièvement un tooltip pour la prochaine action
   var tip = document.getElementById('measureTip');
   if (tip) {
-    tip.textContent = distStr + ' ' + unit + ' | Double-clic pour mesurer à nouveau';
+    tip.textContent = distStr + ' ' + unit + ' | Double-click to measure again';
     tip.style.display = 'block';
     setTimeout(function() { tip.style.display = 'none'; }, 4000);
   }
@@ -157,7 +157,7 @@ LV.Measure.clear = function() {
 
 // ── Bouton toolbar : enregistrement via le registre centralisé ──
 LV.TOOLS.register('btn-measure', {
-  label: 'Mesurer (2 points)',
+  label: 'Measure (2 points)',
   on: function(btn) {
     if (LV.Measure.active) {
       LV.Measure.deactivate();
