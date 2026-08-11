@@ -8,33 +8,52 @@
 </head>
 <body>
 <main>
-  <h1>OpenLiDAR — Sources & data</h1>
-  <p class="meta">Last updated: August 2026.</p>
-  <p>OpenLiDAR is a side-by-side LiDAR / DTM relief viewer, 100% client-side, no account, no API key. It aggregates public elevation and imagery services across Europe.</p>
+  <h1>Sources &amp; data</h1>
+  <p class="meta">OpenLiDAR — Last updated: August 2026 · Language: English.</p>
+
+  <p>OpenLiDAR is a side-by-side LiDAR / DTM relief viewer, 100% client-side, no account, no API key. The app is an <strong>aggregator of public data</strong>: it does not host, own or modify the underlying datasets. Relief, imagery and geocoding are fetched live from the public services listed below. Each licence sets how that source may be used and attributed; where a source requires a credit line, it is shown in the map's attribution control and reproduced here.</p>
 
   <h2>Relief (LiDAR / DTM)</h2>
-  <ul>
-    <li><strong>France</strong> — <a href="https://geoservices.ign.fr/" target="_blank" rel="noopener">IGN Géoservices</a>, WMTS/MNT hillshade, <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence/" target="_blank" rel="noopener">LICENCE OUVERTE 2.0</a>. Source: IGN — updated 2026.</li>
-    <li><strong>Belgium</strong> (Flanders &amp; Wallonia) — official regional LiDAR/DTM WMS/WMTS services, open data.</li>
-    <li><strong>Switzerland</strong> — swisstopo DTM/relief WMS, open data.</li>
-    <li><strong>England</strong> — <a href="https://environment.data.gov.uk/" target="_blank" rel="noopener">Environment Agency</a> LiDAR DTM WMS, OGL v3.0.</li>
-    <li><strong>Czechia, Slovakia, Luxembourg, Sweden, Norway</strong> — official national LiDAR/DTM tile services.</li>
-    <li><strong>Spain</strong> (PNOA LiDAR, MDT) &amp; <strong>Italy</strong> (PCN, TINITALY) — dev/partial coverage.</li>
-  </ul>
+  <table>
+    <tr><th>Country / Region</th><th>Provider &amp; service</th><th>Licence</th><th>Attribution</th></tr>
+    <tr><td>France</td><td><a href="https://geoservices.ign.fr/" target="_blank" rel="noopener">IGN Géoservices</a> (MNT / WMTS hillshade)</td><td><a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence/" target="_blank" rel="noopener">LICENCE OUVERTE 2.0</a></td><td>IGN — source, updated 2026</td></tr>
+    <tr><td>Belgium (Flanders)</td><td>Digitaal Hoogtemodel Vlaanderen (WMS)</td><td>Open data</td><td>DHMV / AGIV</td></tr>
+    <tr><td>Belgium (Wallonia)</td><td>SPW — MNT/DTM (WMS)</td><td>Open data</td><td>SPW</td></tr>
+    <tr><td>Switzerland</td><td>swisstopo — DTM / relief (WMS)</td><td><a href="https://www.swisstopo.admin.ch/en/home/meta/conditions.html" target="_blank" rel="noopener">Open Government Data</a></td><td>swisstopo</td></tr>
+    <tr><td>England</td><td><a href="https://environment.data.gov.uk/" target="_blank" rel="noopener">Environment Agency</a> LiDAR DTM (WMS)</td><td><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">OGL v3.0</a></td><td>Environment Agency</td></tr>
+    <tr><td>Czechia</td><td>DMR/DMP (ČÚZK, WMS)</td><td>Open data</td><td>ČÚZK</td></tr>
+    <tr><td>Slovakia</td><td>DMR (ÚGKK)</td><td>Open data</td><td>ÚGKK</td></tr>
+    <tr><td>Luxembourg</td><td>ACT LiDAR/DTM</td><td>Open data</td><td>ACT</td></tr>
+    <tr><td>Sweden</td><td>Lantmäteriet höjdmodell</td><td>Open data</td><td>Lantmäteriet</td></tr>
+    <tr><td>Norway</td><td>Høydedata (Kartverket, ArcGIS ImageServer)</td><td><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">OGL v3.0</a> / Norwegian licence</td><td>Kartverket</td></tr>
+    <tr><td>Spain <small>(dev)</small></td><td>PNOA LiDAR / MDT</td><td>Open data / CC</td><td>PNOA / IGN-E</td></tr>
+    <tr><td>Italy <small>(dev)</small></td><td>PCN, TINITALY</td><td>Open / ODbL*</td><td>ISPRA / CNR</td></tr>
+  </table>
+  <p><small>*Italian sources are experimental and may be partial or unavailable.</small></p>
 
   <h2>Imagery &amp; basemaps</h2>
-  <ul>
-    <li>OpenStreetMap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM contributors</a> (ODbL)</li>
-    <li>Satellite / Hybrid © Google</li>
-    <li>Esri World Imagery © Esri, Maxar, Earthstar Geographics</li>
-    <li>CARTO basemaps © OpenStreetMap contributors © CARTO</li>
-  </ul>
+  <table>
+    <tr><th>Layer</th><th>Provider</th><th>Licence</th></tr>
+    <tr><td>OpenStreetMap</td><td>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM contributors</a></td><td><a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">ODbL</a></td></tr>
+    <tr><td>Satellite / Hybrid</td><td>Google</td><td>Google Maps/Imagery <a href="https://www.google.com/permissions/geoguidelines/" target="_blank" rel="noopener">terms</a></td></tr>
+    <tr><td>World Imagery</td><td>Esri, Maxar, Earthstar Geographics</td><td>Esri <a href="https://www.esri.com/en-us/legal/terms" target="_blank" rel="noopener">terms</a></td></tr>
+    <tr><td>Dark / Light</td><td>CARTO © OSM contributors</td><td>ODbL + <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO attribution</a></td></tr>
+  </table>
 
   <h2>Overlays &amp; geocoding</h2>
+  <table>
+    <tr><th>Service</th><th>Provider</th><th>Licence</th></tr>
+    <tr><td>Hydrography, cadastre, contour, IGN map</td><td>IGN Géoservices</td><td>LICENCE OUVERTE 2.0</td></tr>
+    <tr><td>Geocoding (addresses)</td><td>api-adresse.data.gouv.fr</td><td>LICENCE OUVERTE 2.0 (<a href="https://adresse.data.gouv.fr/mentions-legales" target="_blank" rel="noopener">mentions</a>)</td></tr>
+    <tr><td>Geocoding (places/IGN)</td><td>IGN Géocodage</td><td>LICENCE OUVERTE 2.0</td></tr>
+  </table>
+
+  <h2>Attribution &amp; licensing notes</h2>
   <ul>
-    <li>Hydrography, cadastre, contour lines, IGN map — IGN Géoservices (LICENCE OUVERTE)</li>
-    <li>Search geocoding — <a href="https://api-adresse.data.gouv.fr/" target="_blank" rel="noopener">api-adresse.data.gouv.fr</a> &amp; <a href="https://geoservices.ign.fr/geocodage" target="_blank" rel="noopener">IGN Geocodage</a></li>
-    <li>All services are public endpoints referenced with an attribution by their respective providers.</li>
+    <li><strong>OSM / ODbL:</strong> attribution to OpenStreetMap contributors and a link to <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">openstreetmap.org/copyright</a> is kept visible on the map, as required by the OSM Foundation attribution guidelines.</li>
+    <li><strong>IGN / LICENCE OUVERTE 2.0:</strong> reuse requires acknowledging the source (IGN) and the date of the most recent update, and allowing consultation of the licence online — both done here.</li>
+    <li><strong>Environment Agency / OGL v3.0:</strong> credit "Contains Environment Agency information © Environment Agency and/or database right".</li>
+    <li>The app never stores, redistributes or serves as an intermediary for these datasets; it only requests tiles directly from the providers. Please respect each provider's fair-use and rate limits.</li>
   </ul>
 
   <p><a href="index.html">← Back to map</a></p>

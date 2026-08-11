@@ -20,3 +20,10 @@ a { color: #663AE0; }
   font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
 }
 .meta { color: #5b6773; font-size: 13px; }
+h3 { font-size: 1.02rem; margin: 20px 0 6px; color: #fff; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid #2b3440; vertical-align: top; }
+th { color: #663AE0; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+tr:last-child td { border-bottom: none; }
+small { color: #5b6773; font-size: 12px; }
+.contact { background: #161b22; border: 1px solid #2b3440; border-radius: 8px; padding: 10px 14px; margin-top: 16px; }
