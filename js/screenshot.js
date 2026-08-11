@@ -11,6 +11,19 @@ var LV = window.LV || {};
 LV.Screenshot = {
   _html2canvasLoaded: false,
 
+  /** Slug court & précis depuis la clé/libellé de couche (nom de fichier). */
+  _slug: function(key) {
+    var label = (LV.LAYER_NAMES && LV.LAYER_NAMES[key]) || String(key || '');
+    var s = label
+      .toLowerCase()
+      .replace(/\s*\([^)]*\)/g, ' ')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/-{2,}/g, '-')
+      .replace(/^-+|-+$/g, '');
+    if (s.length > 22) s = s.slice(0, 22).replace(/-+$/, '');
+    return s || 'x';
+  },
+
   init: function() {
     if (typeof html2canvas !== 'undefined') {
       LV.Screenshot._html2canvasLoaded = true;
@@ -92,7 +105,7 @@ LV.Screenshot = {
           var c = LV.map.getCenter();
           var a = document.createElement('a');
           a.href = url;
-          a.download = 'OpenLiDAR_' + (LV.leftKey || 'left') + '_' + (LV.rightKey || 'right') +
+          a.download = 'OpenLiDAR_' + LV.Screenshot._slug(LV.leftKey) + '_' + LV.Screenshot._slug(LV.rightKey) +
             '_' + c.lat.toFixed(4) + '_' + c.lng.toFixed(4) + '.png';
           document.body.appendChild(a);
           a.click();
